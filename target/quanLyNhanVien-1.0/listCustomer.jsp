@@ -467,11 +467,13 @@
                                     </td>
                                     <td>
                                         <a class="me-3" href="${pageContext.request.contextPath}/admin/customer-order/${customer.personID}">
-                                            <img src="${pageContext.request.contextPath}/assets/img/icons/edit.svg" alt="edit">
+                                            <img src="${pageContext.request.contextPath}/assets/img/icons/product.svg" alt="order">
                                         </a>
-
                                         <a class="me-3" href="javascript:void(0);" onclick="deleteCustomer('${customer.personID}', '${customer.status}')">
                                             <img src="${pageContext.request.contextPath}/assets/img/icons/delete.svg" alt="delete">
+                                        </a>
+                                        <a class="me-3" href="javascript:void(0);" onclick="unlockCustomer('${customer.personID}', '${customer.status}')">
+                                            <img src="${pageContext.request.contextPath}/assets/img/icons/edit.svg" alt="edit">
                                         </a>
                                     </td>
                                 </tr>
@@ -505,11 +507,23 @@
                 </button>
             </div>
             <div class="modal-body">
-
-                Bạn có chắc chắn muốn xóa khách hàng này không?
+                <h6>Bạn có chắc chắn muốn xóa khách hàng này không?</h6>
                 <br>
-
+                <div class="form-group">
+                    <label for="deleteReason">Chọn lý do xóa:</label>
+                    <select id="deleteReason" class="form-control">
+                        <option value="">-- Chọn lý do --</option>
+                        <option value="Thông tin không chính xác">Thông tin không chính xác</option>
+                        <option value="Tài khoản bị nghi ngờ lừa đảo">Tài khoản bị nghi ngờ lừa đảo</option>
+                        <option value="Yêu cầu của khách hàng">Yêu cầu của khách hàng</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea id="deleteReasonText" class="form-control" placeholder="Nhập lý do khác (nếu có)" style="display: none;"></textarea>
+                </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="$('#confirmDeleteModal').modal('hide')">Hủy</button>
                 <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xóa</button>
@@ -528,7 +542,7 @@
                 </button>
             </div>
             <div class="modal-body">
-               <h6>Bạn chưa chọn khách hàng cần xóa trong danh sách ? </h6>
+               <h6>Bạn chưa chọn khách hàng trong danh sách ? </h6>
                 <br>
             </div>
             <div class="modal-footer">
@@ -557,6 +571,25 @@
     </div>
 </div>
 
+<div class="modal fade" id="unlockCustomerSuccess" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="thu1">Xác nhận mở khóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#unlockCustomerSuccess').modal('hide')">
+                    <span aria-hidden="true">&times; </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h6>Khách hàng đã được mở khóa thành công ? </h6>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="$('#unlockCustomerSuccess').modal('hide')">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -596,6 +629,26 @@
     </div>
 </div>
 
+<div class="modal fade" id="unlockCustomerStatus" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unlockStatus">Xác nhận xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#unlockCustomerStatus').modal('hide')">
+                    <span aria-hidden="true">&times; </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h6>Khách hàng này đang hoạt động . </h6>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="$('#unlockCustomerStatus').modal('hide')">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="customerStatusList" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -611,8 +664,27 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" id="btnUncheckCustomers" >Bỏ chọn</button>
                 <button type="button" class="btn btn-danger" onclick="$('#customerStatusList').modal('hide')">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-
+<!-- Modal Xác nhận Mở Khóa -->
+<div class="modal fade" id="confirmUnlockModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnlockModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmUnlockModalLabel">Xác nhận mở khóa tài khoản</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#confirmUnlockModal').modal('hide')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h6>Bạn có chắc chắn muốn mở khóa tài khoản của khách hàng này không?</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="$('#confirmUnlockModal').modal('hide')">Hủy</button>
+                <button type="button" class="btn btn-success" id="confirmUnlockButton">Mở Khóa</button>
             </div>
         </div>
     </div>
@@ -636,6 +708,15 @@
             loader.style.display = 'none';
         }
     };
+    $(document).ready(function () {
+        $('#deleteReason').on('change', function () {
+            if ($(this).val() === 'Khác') {
+                $('#deleteReasonText').show();
+            } else {
+                $('#deleteReasonText').hide();
+            }
+        });
+    });
 
     $('#btnSearchCustomer').click(function (e) {
         e.preventDefault();
@@ -680,6 +761,13 @@
         } else {
             // Trạng thái là 'Active', thực hiện xóa ngay lập tức
             btnDeleteCustomer(customerId);
+        }
+    }
+    function unlockCustomer(customerId, status) {
+        if (status !== 'InActive') {
+            $('#unlockCustomerStatus').modal('show');
+        } else {
+            unlockCustomers(customerId);
         }
     }
     var inactiveCustomers = [];
@@ -759,24 +847,67 @@
         $('#confirmDeleteModal').modal('show');
 
         $('#confirmDeleteButton').off('click').on('click', function () {
+            const reason = $('#deleteReason').val();
+            const additionalReason = $('#deleteReasonText').val();
+
+            if (!reason) {
+                alert("Vui lòng chọn lý do xóa.");
+                return;
+            }
+
+            let deleteMessage = reason;
+            if (reason === 'Khác') {
+                deleteMessage = additionalReason || "Không có lý do cụ thể.";
+            }
+
             $('#confirmDeleteModal').modal('hide');
-                $.ajax({
-                    url: "${pageContext.request.contextPath}/admin/customer-list/" + data,
-                    type: "POST",
-                    dataType: "text",
-                    success: function (result) {
-                        $('#deleteCustomerSuccess').modal('show');
-                        $('#deleteCustomerSuccess').on('hidden.bs.modal', function () {
-                            location.reload();
-                        });
-                    },
-                    error: function (result) {
-                        console.log("error");
-                        alert(result.message || "Có lỗi xảy ra, vui lòng thử lại.");
-                    }
-                });
+
+            $.ajax({
+                url: "${pageContext.request.contextPath}/admin/customer-list/" + data,
+                type: "POST",
+                data: {
+                    reason: deleteMessage,
+                    action: "lock"
+                },
+                success: function (result) {
+                    $('#deleteCustomerSuccess').modal('show');
+                    $('#deleteCustomerSuccess').on('hidden.bs.modal', function () {
+                        location.reload();
+                    });
+                },
+                error: function (result) {
+                    console.log("error");
+                    alert(result.message || "Có lỗi xảy ra, vui lòng thử lại.");
+                }
+            });
         });
     }
+    function unlockCustomers(customerId) {
+        $('#confirmUnlockModal').modal('show');
+
+        $('#confirmUnlockButton').off('click').on('click', function () {
+            $('#confirmUnlockModal').modal('hide');
+
+            $.ajax({
+                url: "${pageContext.request.contextPath}/admin/customer-list/" + customerId,
+                type: "POST",
+                data: {
+                    action: "unlock"
+                },
+                success: function (result) {
+                    $('#unlockCustomerSuccess').modal('show');
+                    $('#unlockCustomerSuccess').on('hidden.bs.modal', function () {
+                        location.reload();
+                    });
+                },
+                error: function (result) {
+                    console.log("error");
+                    alert(result.message || "Có lỗi xảy ra, vui lòng thử lại.");
+                }
+            });
+        });
+    }
+
 </script>
 <!-- Chèn các tệp JavaScript với đường dẫn được điều chỉnh -->
 <script src="${pageContext.request.contextPath}/scripts/pagination.js"></script>

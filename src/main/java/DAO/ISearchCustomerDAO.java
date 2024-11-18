@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ISearchCustomerDAO {
     List<Customer> getAllCustomer(CustomerRequestDTO reqDTO);
+    Customer findById(String customerId);
+    void updateCustomerStatus(String customerId, String status);
 }

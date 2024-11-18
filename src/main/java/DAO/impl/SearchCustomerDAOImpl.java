@@ -43,4 +43,31 @@ public class SearchCustomerDAOImpl implements ISearchCustomerDAO {
             em.close();
         }
     }
+    @Override
+    public Customer findById(String customerId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.find(Customer.class, customerId);
+        } finally {
+            em.close();
+        }
+    }
+    @Override
+    public void updateCustomerStatus(String customerId, String status) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Customer customer = em.find(Customer.class, customerId);
+            if (customer != null) {
+                customer.setStatus(status);
+                em.merge(customer);
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw new RuntimeException("Có lỗi xảy ra khi cập nhật trạng thái khách hàng: " + e.getMessage(), e);
+        } finally {
+            em.close();
+        }
+    }
 }
