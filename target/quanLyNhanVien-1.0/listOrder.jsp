@@ -284,7 +284,7 @@
                          style="text-align: left; margin-bottom: 15px; padding: 10px; border-left: 5px solid #28a745; border-radius: 5px;">
                         <h6 class="search-title"
                             style="font-size: 1.3em; font-weight: 500; color: #1a1e21; font-family: 'Poppins', sans-serif; margin: 0; padding-left: 10px; display: flex; align-items: center; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">
-                            🔍 Tìm Kiếm Khách Hàng
+                            🔍 Tìm Kiếm Đơn Hàng
                         </h6>
                     </div>
                         <div class="card-body pb-0">
@@ -324,7 +324,7 @@
                         </div>
                         <br>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table" id="orderList">
 
                             <thead>
                             <tr>
@@ -383,13 +383,14 @@
                         </table>
 
                     </div>
-                    <div class="container mt-5">
-                        <div class="d-flex justify-content-center pagination">
-                            <button id="prev-page" class="btn btn-primary me-2" disabled>&lt;</button>
-                            <span id="page-info" class="align-self-center">Page 1 of X</span>
-                            <button id="next-page" class="btn btn-primary ms-2">&gt;</button>
+                        <!-- Phân trang -->
+                        <div class="container mt-5">
+                            <div class="d-flex justify-content-center pagination form-group">
+                                <button id="prev-page" type="button" class="btn btn-primary me-2" disabled>&lt;</button>
+                                <span id="page-info" class="align-self-center">Page 1 of X</span>
+                                <button id="next-page" type="button" class="btn btn-primary ms-2">&gt;</button>
+                            </div>
                         </div>
-                    </div>
                 </div>
 
             </div>
@@ -423,6 +424,45 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="productOfOrderList" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="max-width: 90%; width: 90%; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);">
+        <div class="modal-content" style="border: none; background: #ffffff;">
+            <div class="modal-header" style="background: linear-gradient(to right, #ffffff, #f8f9fa); color: #000000; padding: 15px; border-bottom: 1px solid #dee2e6;">
+                <h5 class="modal-title" id="statusList" style="font-weight: bold;">Danh Sách Sản Phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #000000; opacity: 1;" onclick="$('#productOfOrderList').modal('hide')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <!-- Bọc bảng trong table-responsive để có cuộn ngang -->
+                <div class="table-responsive" style="margin-top: 10px;">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr style="background: #17a2b8; color: white; font-weight: bold;">
+                            <th>STT</th>
+                            <th>Nội Thất</th>
+                            <th>Mô Tả</th>
+                            <th>Giá Một Sản Phẩm</th>
+                            <th>Trạng Thái</th>
+                            <th>Số Lượng</th>
+                            <th>Tổng Chi Phí</th>
+                        </tr>
+                        </thead>
+                        <tbody id="productOrderTableBody" style="color: #555;">
+                        <!-- Dữ liệu sẽ được điền động từ JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" style="background: #f8f9fa; border-top: 1px solid #dee2e6;">
+                <button type="button" class="btn btn-success" data-dismiss="modal" style="border-radius: 5px;" onclick="$('#productOfOrderList').modal('hide')">Hủy Thao Tác</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="scripts/pagination.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/feather.min.js"></script>
@@ -435,84 +475,10 @@
 <script src="${pageContext.request.contextPath}/assets/plugins/sweetalert/sweetalerts.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/script.js"></script>
 
+<script src="${pageContext.request.contextPath}/ordercustomer/pageorderCustomer.js"></script>
+<script src="${pageContext.request.contextPath}/ordercustomer/loadAndSearchOrder.js"></script>
+<jsp:include page="${pageContext.request.contextPath}/ordercustomer/loadFeedback.jsp"></jsp:include>
+<jsp:include page="${pageContext.request.contextPath}/ordercustomer/loadProductOfOrder.jsp"></jsp:include>
 
-<script>
-
-    $('#btnSearchOrder').click(function (e){
-        e.preventDefault();
-
-        $('#listForm').submit();
-    })
-    function viewFeedbackCustomer(orderID) {
-        $('#feedback').modal();
-        loadFeedback(orderID);
-    }
-    function loadFeedback(orderID) {
-        $.ajax({
-            url: "/admin/customer-order/" + orderID,
-            type: "POST",
-            // data: JSON.stringify(json),
-            // contentType: "application/json",
-            dataType:"json",
-            success: function(response) {
-                $('#feedback-description').text(response.description || 'Không có phản hồi.');
-
-                // Hiển thị số sao đánh giá
-                let rateStars = '';
-                for (let i = 0; i < response.rate; i++) {
-                    rateStars += '<span style="color: gold;">&#9733;</span>';
-                }
-                for (let i = response.rate; i < 5; i++) {
-                    rateStars += '<span style="color: lightgray;">&#9733;</span>';
-                }
-
-
-                $('#feedback-rate').html('Rate: ' + rateStars);
-
-
-                $('#feedback-image').html('Rate: ' + rateStars);
-
-                // load ảnh
-                if (response.feedbackImage !== null) {
-                    $('#feedback-image').attr('src', 'data:image/jpeg;base64,' + response.feedbackImage).show();
-                } else {
-                     // Ẩn ảnh nếu không có
-                }
-
-                $('#feedback').modal('show');
-                //alert(response.message);
-            },
-
-            error: function (result) {
-                console.log("error");
-                //alert(result.message);
-            }
-        });
-    }
-
-
-
-    function viewListProduct(orderID) {
-       // $('#feedback').modal();
-        loadListProduct(orderID);
-    }
-    function loadListProduct(orderID) {
-        $.ajax({
-            url: "/admin/customer-order/" + orderID,
-            type: "PUT",
-            // data: JSON.stringify(json),
-            // contentType: "application/json",
-            dataType:"json",
-            success: function(response) {
-
-            },
-
-            error: function (result) {
-                console.log("error");
-                //alert(result.message);
-            }
-        });
-    }
-</script>
 </body>
 </html>

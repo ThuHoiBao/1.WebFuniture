@@ -494,12 +494,12 @@
                         </table>
 
                     </div>
+                    <!-- Phân trang -->
                     <div class="container mt-5">
-                        <div class="d-flex justify-content-center pagination">
-                            <button id="prev-page" class="btn btn-primary me-2"
-                                    disabled>&lt;</button>
+                        <div class="d-flex justify-content-center pagination form-group">
+                            <button id="prev-page" type="button" class="btn btn-primary me-2" disabled>&lt;</button>
                             <span id="page-info" class="align-self-center">Page 1 of X</span>
-                            <button id="next-page" class="btn btn-primary ms-2">&gt;</button>
+                            <button id="next-page" type="button" class="btn btn-primary ms-2">&gt;</button>
                         </div>
                     </div>
                 </div>
@@ -738,6 +738,8 @@
 <script src="${pageContext.request.contextPath}/managermentCustomer/loader.js"></script>
 
 <script src="${pageContext.request.contextPath}/managermentCustomer/searchCustomer.js"></script>
+
+<script src="${pageContext.request.contextPath}/managermentCustomer/pagination.js"></script>
 
 <jsp:include page="${pageContext.request.contextPath}/managermentCustomer/lockCustomer.jsp"></jsp:include>
 

@@ -23,17 +23,36 @@ public class ManagermentCustomerDAOImpl implements IManagermentCustomerDAO {
         EntityManager em = emf.createEntityManager();
         try {
             StringBuilder queryBuilder = new StringBuilder("SELECT c FROM Customer c WHERE 1=1");
+
+            // Thêm điều kiện nếu email được cung cấp
             if (reqDTO.getEmail() != null && !reqDTO.getEmail().isEmpty()) {
-                queryBuilder.append(" AND c.email LIKE '%" + reqDTO.getEmail() + "%'");
+                queryBuilder.append(" AND c.email LIKE :email");
+            }
+
+            // Thêm điều kiện nếu phone được cung cấp
+            if (reqDTO.getPhone() != null && !reqDTO.getPhone().isEmpty()) {
+                queryBuilder.append(" AND c.phone LIKE :phone");
+            }
+
+            // Thêm điều kiện nếu name được cung cấp
+            if (reqDTO.getName() != null && !reqDTO.getName().isEmpty()) {
+                queryBuilder.append(" AND c.name LIKE :name");
+            }
+
+            // Tạo truy vấn
+            TypedQuery<Customer> query = em.createQuery(queryBuilder.toString(), Customer.class);
+
+            // Thiết lập giá trị tham số
+            if (reqDTO.getEmail() != null && !reqDTO.getEmail().isEmpty()) {
+                query.setParameter("email", "%" + reqDTO.getEmail() + "%");
             }
             if (reqDTO.getPhone() != null && !reqDTO.getPhone().isEmpty()) {
-                queryBuilder.append(" AND c.phone LIKE '%" + reqDTO.getPhone() + "%'");
+                query.setParameter("phone", "%" + reqDTO.getPhone() + "%");
             }
             if (reqDTO.getName() != null && !reqDTO.getName().isEmpty()) {
-                queryBuilder.append(" AND c.name LIKE '%" + reqDTO.getName() + "%'");
+                query.setParameter("name", "%" + reqDTO.getName() + "%");
             }
-            queryBuilder.append(" ORDER BY c.status ASC");
-            TypedQuery<Customer> query = em.createQuery(queryBuilder.toString(), Customer.class);
+
             return query.getResultList();
 
         } catch (Exception e) {
@@ -43,6 +62,7 @@ public class ManagermentCustomerDAOImpl implements IManagermentCustomerDAO {
             em.close();
         }
     }
+
     @Override
     public Customer findById(String customerId) {
         EntityManager em = emf.createEntityManager();
