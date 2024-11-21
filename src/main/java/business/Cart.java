@@ -4,14 +4,9 @@
  */
 package business;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.OneToMany;
 
 /**
  *
@@ -20,33 +15,32 @@ import javax.persistence.OneToMany;
 @Entity
 public class Cart implements Serializable {
     @Id
-    private String cartID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     
     @OneToMany
     private List<Furniture> listFurniture;
     
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "CUSTOMERID") // Tên cột trong bảng Cart để lưu trữ ID của Customer
     private Customer customer;
 
     public Cart() {
     }
 
-    public Cart(String cartID, List<Furniture> listFurniture, Customer customer) {
-        this.cartID = cartID;
+    public Cart(List<Furniture> listFurniture, Customer customer) {
         this.listFurniture = listFurniture;
         this.customer = customer;
     }
-     
 
-    public String getCartID() {
-        return cartID;
+    public Long getId() {
+        return id;
     }
 
-    public void setCartID(String cartID) {
-        this.cartID = cartID;
+    public void setId(Long id) {
+        this.id = id;
     }
-    
+
     public List<Furniture> getListFurniture() {
         return listFurniture;
     }

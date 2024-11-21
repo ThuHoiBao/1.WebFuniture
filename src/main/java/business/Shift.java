@@ -1,16 +1,14 @@
 package business;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 public class Shift implements Serializable {
     @Id
-    private String shiftID;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long shiftID;
     private String shiftName;
     @Temporal(TemporalType.DATE)   
     private Date shiftDate;
@@ -19,11 +17,11 @@ public class Shift implements Serializable {
     
     // Getters and Setters
 
-    public String getShiftID() {
+    public Long getShiftID() {
         return shiftID;
     }
 
-    public void setShiftID(String shiftID) {
+    public void setShiftID(Long shiftID) {
         this.shiftID = shiftID;
     }
 

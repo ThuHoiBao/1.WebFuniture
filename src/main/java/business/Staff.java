@@ -47,6 +47,4 @@ public class Staff extends Person {
     public void setListShift(List<Shift> listShift) {
         this.listShift = listShift;
     }
-    
-    
 }

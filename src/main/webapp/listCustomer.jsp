@@ -84,7 +84,6 @@
                 </div>
             </li>
 
-
             <li class="nav-item dropdown has-arrow flag-nav">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
                    href="javascript:void(0);" role="button">
@@ -333,9 +332,22 @@
                         <h6>Tìm kiếm/xem chi tiết khách hàng </h6>
 
                     </div>
-                    <div class="page-btn" id="btnDeleteCustomers">
-                        <a  class="btn btn-added"><img src="${pageContext.request.contextPath}/assets/img/icons/delete.svg" alt="img">Xóa Khách Hàng</a>
+
+                    <div class="button-container" style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                        <div class="page-btn" id="btnDeleteCustomers" style="margin: 0; padding: 0;">
+                            <a class="btn btn-added" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; text-decoration: none; padding: 10px 20px; font-size: 16px; font-weight: 500; line-height: 1;">
+                                <img src="${pageContext.request.contextPath}/assets/img/icons/delete.svg" alt="img" style="width: 16px; height: 16px;">
+                                Khóa Khách Hàng
+                            </a>
+                        </div>
+                        <div class="page-btn" id="btnUnlockCustomers" style="margin: 0; padding: 0;">
+                            <a class="btn btn-success" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; text-decoration: none; padding: 10px 20px; font-size: 16px; font-weight: 500; line-height: 1;">
+                                <img src="${pageContext.request.contextPath}/assets/img/icons/edit-set.svg" alt="img" style="width: 16px; height: 16px;">
+                                Mở Khóa Khách Hàng
+                            </a>
+                        </div>
                     </div>
+
                 </div>
 
                 <div class="card">
@@ -446,7 +458,7 @@
                                     </td>
                                     <td class="productimgname">
                                         <a href="javascript:void(0);" class="product-img">
-                                            <img src="${pageContext.request.contextPath}/assets/img/profiles/avator1.jpg"
+                                            <img src="data:image/jpeg;base64,${customer.avatar} "
                                                  alt="Avatar" />
                                         </a>
                                         <a href="javascript:void(0);">${customer.name}</a>
@@ -466,7 +478,7 @@
                                         </c:choose>
                                     </td>
                                     <td>
-                                        <a class="me-3" href="${pageContext.request.contextPath}/admin/customer-order/${customer.personID}">
+                                        <a class="me-3" href="${pageContext.request.contextPath}/admin/customer-order?customerId=${customer.personID}">
                                             <img src="${pageContext.request.contextPath}/assets/img/icons/product.svg" alt="order">
                                         </a>
                                         <a class="me-3" href="javascript:void(0);" onclick="deleteCustomer('${customer.personID}', '${customer.status}')">
@@ -648,7 +660,7 @@
         </div>
     </div>
 </div>
-
+<!-- Modal bỏ chọn  Khóa -->
 <div class="modal fade" id="customerStatusList" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -664,6 +676,26 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" id="btnUncheckCustomers" >Bỏ chọn</button>
                 <button type="button" class="btn btn-danger" onclick="$('#customerStatusList').modal('hide')">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal bỏ chọn Mở Khóa -->
+<div class="modal fade" id="unlockCustomerStatusList" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="statusLit">Xác nhận xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#unlockCustomerStatusList').modal('hide')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnUnlockUncheckCustomers" >Bỏ chọn</button>
+                <button type="button" class="btn btn-danger" onclick="$('#unlockCustomerStatusList').modal('hide')">Đóng</button>
             </div>
         </div>
     </div>
@@ -689,227 +721,6 @@
         </div>
     </div>
 </div>
-
-<script src="${pageContext.request.contextPath}/assets/js/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Thêm SweetAlert CSS và JS từ CDN -->
-
-
-<script>
-    $(document).ready(function () {
-        // Ẩn loader khi trang đã tải xong
-        $('#global-loader').fadeOut('slow');
-    });
-    window.onload = function () {
-        // Ẩn loader khi trang đã tải xong
-        var loader = document.getElementById('global-loader');
-        if (loader) {
-            loader.style.display = 'none';
-        }
-    };
-    $(document).ready(function () {
-        $('#deleteReason').on('change', function () {
-            if ($(this).val() === 'Khác') {
-                $('#deleteReasonText').show();
-            } else {
-                $('#deleteReasonText').hide();
-            }
-        });
-    });
-
-    $('#btnSearchCustomer').click(function (e) {
-        e.preventDefault();
-
-        let phone = $("input[name='phone']").val();
-        let name = $("input[name='name']").val();
-        let email = $("input[name='email']").val();
-
-        if (phone) {
-            let phoneRegex = /^[0-9]+$/; // Đảm bảo chỉ chứa chữ số
-            if (!phoneRegex.test(phone)) {
-                $('#errorMessage').text("Số điện thoại chỉ được chứa chữ số.");
-                $('#errorModal').modal('show');
-                return;
-            }
-        }
-
-        if (name) {
-            let nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;  // Bao gồm cả tiếng Việt và dấu cách
-            if (!nameRegex.test(name)) {
-                $('#errorMessage').text("Tên không được chứa chữ số hoặc ký tự đặc biệt.");
-                $('#errorModal').modal('show');
-                return;
-            }
-        }
-
-        // Kiểm tra email chỉ khi trường không rỗng
-        if (email) {
-            let emailRegex = /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.)+[a-zA-Z]{2,}$/;
-            if (!emailRegex.test(email)) {
-                $('#errorMessage').text("Email không hợp lệ. Đảm bảo có đuôi đúng như .com, .net, .org, v.v.");
-                $('#errorModal').modal('show');
-                return;
-            }
-        }
-
-        $('#listForm').submit();
-    });
-    function deleteCustomer(customerId, status) {
-        if (status !== 'Active') {
-            $('#customerStatus').modal('show');
-        } else {
-            // Trạng thái là 'Active', thực hiện xóa ngay lập tức
-            btnDeleteCustomer(customerId);
-        }
-    }
-    function unlockCustomer(customerId, status) {
-        if (status !== 'InActive') {
-            $('#unlockCustomerStatus').modal('show');
-        } else {
-            unlockCustomers(customerId);
-        }
-    }
-    var inactiveCustomers = [];
-    var selectedCustomers = [];
-    $('#btnDeleteCustomers').click(function (e) {
-        e.preventDefault();
-        // Đặt lại mảng khi nhấn nút
-        selectedCustomers = [];
-        inactiveCustomers = [];
-        // Duyệt qua các checkbox được chọn trong bảng
-        $('#customerList').find('tbody input[type=checkbox]:checked').each(function () {
-            var customerId = $(this).val();
-            var row = $(this).closest('tr');
-            var customerName = row.find('td:nth-child(2) a').text().trim();
-            var customerPhone = row.find('td:nth-child(3)').text().trim();
-            var customerStatus = row.find('td:nth-child(6) .badges').text().trim();
-
-            if (customerStatus.toLowerCase() !== 'active') {
-                // Thêm thông tin khách hàng vào danh sách đã xóa
-                inactiveCustomers.push({
-                    id: customerId,
-                    name: customerName || 'Không rõ',
-                    phone: customerPhone || 'Không rõ'
-                });
-            } else {
-                // Thêm ID khách hàng vào danh sách để xóa
-                selectedCustomers.push(customerId);
-            }
-        });
-        // Hiển thị danh sách khách hàng đã bị xóa nếu có
-        if (inactiveCustomers.length > 0) {
-            // Khởi tạo chuỗi HTML
-            var htmlContent = '<h6>Những khách hàng sau đã bị xóa trước đó:</h6>';
-            htmlContent += '<table class="table table-bordered">';
-            htmlContent += '<thead><tr><th>STT</th><th>Tên Khách Hàng</th><th>Số Điện Thoại</th></tr></thead>';
-            htmlContent += '<tbody>';
-
-            // Duyệt qua danh sách khách hàng và tạo các hàng cho bảng
-            for (var i = 0; i < inactiveCustomers.length; i++) {
-                var customer = inactiveCustomers[i];
-                htmlContent += '<tr>';
-                htmlContent += '<td>' + (i + 1) + '</td>';
-                htmlContent += '<td>' + (customer.name || 'Không rõ') + '</td>';
-                htmlContent += '<td>' + (customer.phone || 'Không rõ') + '</td>';
-                htmlContent += '</tr>';
-            }
-            htmlContent += '</tbody></table>';
-            // Chèn chuỗi HTML vào modal
-            $('#customerStatusList .modal-body').html(htmlContent);
-            $('#customerStatusList').modal('show');
-        } else if (selectedCustomers.length > 0) {
-            btnDeleteCustomer(selectedCustomers);
-        } else {
-            $('#deleteCustomer').modal('show');
-        }
-    });
-    // Xử lý sự kiện khi nhấn nút "Bỏ chọn"
-    $('#btnUncheckCustomers').click(function () {
-        // Bỏ chọn tất cả các checkbox tương ứng với khách hàng trong danh sách đã xóa
-        $('#customerList').find('tbody input[type=checkbox]:checked').each(function () {
-            var customerId = $(this).val();
-            // Kiểm tra nếu ID của khách hàng nằm trong danh sách "inactiveCustomers"
-            var isInactive = inactiveCustomers.some(function (customer) {
-                return customer.id === customerId;
-            });
-
-            // Nếu có trong danh sách, bỏ chọn checkbox
-            if (isInactive) {
-                $(this).prop('checked', false);
-            }
-        });
-
-        // Ẩn modal sau khi bỏ chọn
-        $('#customerStatusList').modal('hide');
-    });
-    function btnDeleteCustomer(data) {
-        $('#confirmDeleteModal').modal('show');
-
-        $('#confirmDeleteButton').off('click').on('click', function () {
-            const reason = $('#deleteReason').val();
-            const additionalReason = $('#deleteReasonText').val();
-
-            if (!reason) {
-                alert("Vui lòng chọn lý do xóa.");
-                return;
-            }
-
-            let deleteMessage = reason;
-            if (reason === 'Khác') {
-                deleteMessage = additionalReason || "Không có lý do cụ thể.";
-            }
-
-            $('#confirmDeleteModal').modal('hide');
-
-            $.ajax({
-                url: "${pageContext.request.contextPath}/admin/customer-list/" + data,
-                type: "POST",
-                data: {
-                    reason: deleteMessage,
-                    action: "lock"
-                },
-                success: function (result) {
-                    $('#deleteCustomerSuccess').modal('show');
-                    $('#deleteCustomerSuccess').on('hidden.bs.modal', function () {
-                        location.reload();
-                    });
-                },
-                error: function (result) {
-                    console.log("error");
-                    alert(result.message || "Có lỗi xảy ra, vui lòng thử lại.");
-                }
-            });
-        });
-    }
-    function unlockCustomers(customerId) {
-        $('#confirmUnlockModal').modal('show');
-
-        $('#confirmUnlockButton').off('click').on('click', function () {
-            $('#confirmUnlockModal').modal('hide');
-
-            $.ajax({
-                url: "${pageContext.request.contextPath}/admin/customer-list/" + customerId,
-                type: "POST",
-                data: {
-                    action: "unlock"
-                },
-                success: function (result) {
-                    $('#unlockCustomerSuccess').modal('show');
-                    $('#unlockCustomerSuccess').on('hidden.bs.modal', function () {
-                        location.reload();
-                    });
-                },
-                error: function (result) {
-                    console.log("error");
-                    alert(result.message || "Có lỗi xảy ra, vui lòng thử lại.");
-                }
-            });
-        });
-    }
-
-</script>
-<!-- Chèn các tệp JavaScript với đường dẫn được điều chỉnh -->
 <script src="${pageContext.request.contextPath}/scripts/pagination.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/feather.min.js"></script>
@@ -924,6 +735,13 @@
         src="${pageContext.request.contextPath}/assets/plugins/sweetalert/sweetalerts.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/script.js"></script>
 
-</body>
+<script src="${pageContext.request.contextPath}/managermentCustomer/loader.js"></script>
 
+<script src="${pageContext.request.contextPath}/managermentCustomer/searchCustomer.js"></script>
+
+<jsp:include page="${pageContext.request.contextPath}/managermentCustomer/lockCustomer.jsp"></jsp:include>
+
+<jsp:include page="${pageContext.request.contextPath}/managermentCustomer/unlockCustomer.jsp"></jsp:include>
+
+</body>
 </html>

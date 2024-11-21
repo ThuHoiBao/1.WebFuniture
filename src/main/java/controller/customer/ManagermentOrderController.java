@@ -1,7 +1,14 @@
 package controller.customer;
 
-import model.requestDTO.CustomerRequestDTO;
-import model.responseDTO.CustomerResponseDTO;
+import DTO.requestDTO.OrderRequestDTO;
+import DTO.responseDTO.FeedbackResponseDTO;
+import DTO.responseDTO.OrderResponseDTO;
+import business.Order;
+import com.google.gson.Gson;
+import service.IFeedbackService;
+import service.IOrderService;
+import service.Impl.FeedbackServiceImpl;
+import service.Impl.OrderServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,36 +16,68 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/admin/customer-order/*"})
 public class ManagermentOrderController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+    private IOrderService orderService=new OrderServiceImpl();
+    private IFeedbackService feedbackService=new FeedbackServiceImpl();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // Lấy customerId từ URL
-        String pathInfo = req.getPathInfo(); // /{id}
-        if (pathInfo == null || pathInfo.equals("/")) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Customer ID is missing");
-            return;
+        String customerId = req.getParameter("customerId");
+        String orderId = req.getParameter("orderId");
+        String orderDateParam = req.getParameter("orderDate");
+
+        OrderRequestDTO searchOrder = new OrderRequestDTO();
+        searchOrder.setCustomerId(customerId);
+
+        if (orderId != null && !orderId.trim().isEmpty()) {
+            try {
+                searchOrder.setOrderID(Long.parseLong(orderId));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
-
-        // Lấy ID khách hàng
-        String customerId = pathInfo.substring(1); // Bỏ dấu "/"
-
-        // Truy vấn danh sách đơn hàng của khách hàng (giả sử sử dụng DAO)
-        //List<Order> orders = OrderDAO.getOrdersByCustomerId(Integer.parseInt(customerId));
-
-        // Lưu danh sách đơn hàng vào request attribute
-        req.setAttribute("orders", "thu");
-
-        // Chuyển tiếp đến trang listOrder.jsp
-        req.getRequestDispatcher("/listOrder.jsp").forward(req, resp);
+        if (orderDateParam != null && !orderDateParam.isEmpty()) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                searchOrder.setOrderDate(dateFormat.parse(orderDateParam));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        req.setAttribute("searchOrder", searchOrder);
+        List<OrderResponseDTO> orders = orderService.getOrder(searchOrder);
+        req.setAttribute("orders", orders);
+        String url = "/listOrder.jsp";
+        getServletContext().getRequestDispatcher(url).forward(req, resp);
     }
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String pathInfo = req.getPathInfo();
+        FeedbackResponseDTO responseDTO = new FeedbackResponseDTO();
+        if (pathInfo != null && pathInfo.length() > 1) {
+            try {
+                Long orderId = Long.parseLong(pathInfo.substring(1));
+                responseDTO = feedbackService.getFeedback(orderId);
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                resp.getWriter().write(new Gson().toJson(responseDTO));
+            } catch (NumberFormatException e) {
+                // Nếu không phải số, gửi lỗi về phía client
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().write("Invalid ID format");
+            }
+        } else {
 
-
-
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("Missing or invalid path info");
+        }
+    }
 }

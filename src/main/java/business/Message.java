@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 public class Message implements Serializable {
 
     @Id
-    private String messID;
+    private Long messID;
     private String content;
     private LocalDateTime sentTime;
 
@@ -22,18 +22,18 @@ public class Message implements Serializable {
     public Message() {
     }
 
-    public Message(String messID, String content, LocalDateTime sentTime, Customer sender) {
+    public Message(Long messID, String content, LocalDateTime sentTime, Customer sender) {
         this.messID = messID;
         this.content = content;
         this.sentTime = sentTime;
         this.sender = sender;
     }
 
-    public String getMessID() {
+    public Long getMessID() {
         return messID;
     }
 
-    public void setMessID(String messID) {
+    public void setMessID(Long messID) {
         this.messID = messID;
     }
 

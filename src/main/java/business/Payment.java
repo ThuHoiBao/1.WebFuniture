@@ -22,8 +22,8 @@ import javax.persistence.TemporalType;
 public class Payment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    
     private Long paymentID;
+
     @Temporal(TemporalType.DATE)    
     private Date paymentDate;
     @OneToOne

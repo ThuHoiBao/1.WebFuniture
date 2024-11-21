@@ -3,16 +3,15 @@ package business;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 
 @Entity
 public class Conversation implements Serializable {
 
     @Id
-    private String conversationID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long conversationID;
 
     @OneToMany
     private List<Message> messageList = new ArrayList<>();
@@ -20,15 +19,15 @@ public class Conversation implements Serializable {
     public Conversation() {
     }
 
-    public Conversation(String conversationID) {
+    public Conversation(Long conversationID) {
         this.conversationID = conversationID;
     }
 
-    public String getConversationID() {
+    public Long getConversationID() {
         return conversationID;
     }
 
-    public void setConversationID(String conversationID) {
+    public void setConversationID(Long conversationID) {
         this.conversationID = conversationID;
     }
 

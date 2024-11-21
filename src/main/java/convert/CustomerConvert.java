@@ -1,9 +1,11 @@
 package convert;
 
-import model.responseDTO.CustomerResponseDTO;
+import DTO.responseDTO.CustomerResponseDTO;
 import business.Customer;
 import business.Address;
 import org.modelmapper.ModelMapper;
+
+import java.util.Base64;
 
 
 public class CustomerConvert {
@@ -12,17 +14,19 @@ public class CustomerConvert {
 
     // Phương thức chuyển đổi từ Customer Entity sang CustomerResponseDTO
     public static CustomerResponseDTO convertToDTO(Customer customer) {
-        // Chuyển đổi Customer thành CustomerResponseDTO bằng ModelMapper
         CustomerResponseDTO dto = modelMapper.map(customer, CustomerResponseDTO.class);
-
-        // Lấy thông tin từ Address và kết hợp thành chuỗi
         if (customer.getAddress() != null) {
             Address address = customer.getAddress();
             String fullAddress = address.getStreet() + ", " + address.getCity() + ", " + address.getProvince() + ", " + address.getCountry();
-            dto.setAddress(fullAddress);  // Gán địa chỉ đã kết hợp vào DTO
+            dto.setAddress(fullAddress);
+
+        }
+        // Chuyển đổi mảng byte của feedbackImage thành chuỗi Base64
+        if (customer.getAvatar() != null) {
+            String base64Image = Base64.getEncoder().encodeToString(customer.getAvatar());
+            dto.setAvatar(base64Image);
         }
         return dto;
     }
-
 }
 

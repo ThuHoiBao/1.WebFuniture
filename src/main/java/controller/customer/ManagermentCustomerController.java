@@ -1,8 +1,10 @@
 package controller.customer;
-import service.ISearchCustomerService;
-import service.Impl.SearchCustomerServiceImpl;
-import model.requestDTO.CustomerRequestDTO;
-import model.responseDTO.CustomerResponseDTO;
+import business.Address;
+import service.IManagermentCustomerService;
+import service.Impl.ManagermentCustomerServiceImpl;
+import DTO.requestDTO.CustomerRequestDTO;
+import DTO.responseDTO.CustomerResponseDTO;
+import utils.AddressDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,10 +19,19 @@ import java.util.List;
 
 public class ManagermentCustomerController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ISearchCustomerService customerService=new SearchCustomerServiceImpl();
+    private AddressDAO addressDAO = new AddressDAO(); // Thêm AddressDAO
+    private IManagermentCustomerService customerService=new ManagermentCustomerServiceImpl();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+//        Address address = new Address();
+//        address.setStreet("123 Main Street");
+//        address.setCity("Hanoi");
+//        address.setProvince("Hanoi Province");
+//        address.setCountry("Vietnam");
+//
+//        // Lưu địa chỉ vào database
+//        addressDAO.insertAddress(address);
         CustomerRequestDTO reqDTO = new CustomerRequestDTO();
         reqDTO.setName(req.getParameter("name"));
         reqDTO.setPhone(req.getParameter("phone"));
@@ -31,30 +42,7 @@ public class ManagermentCustomerController extends HttpServlet {
         String url = "/listCustomer.jsp";
         getServletContext().getRequestDispatcher(url).forward(req, resp);
     }
-//    @Override
-//    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        String pathInfo = req.getPathInfo();
-//        String reason = req.getParameter("reason");
-//
-//        if (pathInfo != null && pathInfo.length() > 1) {
-//            String[] idArray = pathInfo.substring(1).split(",");
-//            List<String> ids = Arrays.asList(idArray);
-//
-//            if (reason == null || reason.isEmpty()) {
-//                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//                resp.getWriter().write("Lý do xóa không được để trống.");
-//                return;
-//            }
-//
-//            ISearchCustomerService customerService = new SearchCustomerServiceImpl();
-//            customerService.lockCustomerStatus(ids, reason);
-//            resp.setStatus(HttpServletResponse.SC_OK);
-//            resp.getWriter().write("Khách hàng đã được xóa thành công.");
-//        } else {
-//            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            resp.getWriter().write("Không tìm thấy ID khách hàng.");
-//        }
-//    }
+
 @Override
 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String pathInfo = req.getPathInfo();
@@ -94,6 +82,4 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
         resp.getWriter().write("Không tìm thấy ID khách hàng.");
     }
 }
-
-
 }

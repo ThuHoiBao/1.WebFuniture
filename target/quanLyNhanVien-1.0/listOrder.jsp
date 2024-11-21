@@ -264,16 +264,21 @@
                                 <img src="${pageContext.request.contextPath}/assets/img/customer/customer1.jpg" alt="Hình đại diện" style="border-radius: 50%; width: 50px; height: 50px; object-fit: cover;">
                             </a>
                             <a style="font-size: 16px; font-weight: bold; margin-left: 10px; vertical-align: middle; display: inline-block;">Trần Anh Thư</a>
+                            <a style="font-size: 16px; font-weight: bold; margin-left: 10px; vertical-align: middle; display: inline-block;">trananhthu270904@gmail.com</a>
                         </div>
                 </div>
 
-                    <h4 style="margin-top: 30px; margin-bottom: 10px;">Danh Sách Đơn Đặt Hàng</h4>
+                    <div class="page-title">
+                        <h4>Quản Lý Đơn Hàng</h4>
+                        <h6>Tìm kiếm/xem phản hồi/xem chi tiết đơn hàng </h6>
+                    </div>
                 </div>
             </div>
             </div>
-
+        <form action="${pageContext.request.contextPath}/admin/customer-order" method="get"
+              id="listForm">
             <div class="card">
-                <form action="${pageContext.request.contextPath}/admin/customer-order" method="get">
+
                     <div class="card-body">
                     <div class="search-header"
                          style="text-align: left; margin-bottom: 15px; padding: 10px; border-left: 5px solid #28a745; border-radius: 5px;">
@@ -282,40 +287,42 @@
                             🔍 Tìm Kiếm Khách Hàng
                         </h6>
                     </div>
-
-
-                    <div class="card-body pb-0">
+                        <div class="card-body pb-0">
                             <div class="row">
+                                <input type="hidden" name="customerId" value="${searchOrder.customerId}" placeholder="Nhập mã khách hàng...">
                                 <div class="col-lg-2 col-sm-6 col-12">
                                     <div class="form-group">
-                                        <input type="text" placeholder="Nhập tên sản phẩm...">
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <input type="text" placeholder="Nhập mã đơn hàng... ">
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <input type="text" placeholder="Nhập mã sản phẩm...">
+                                        <input type="text" name="orderId"  value="${searchOrder.orderID}" placeholder="Nhập mã sản phẩm...">
                                     </div>
                                 </div>
 
                                 <div class="col-lg-2 col-sm-6 col-12">
                                     <div class="form-group">
-                                        <input type="date" name="birth-date" class="form-control">
+                                        <input type="date"  name="orderDate" value="${searchOrder.orderDate}" class="form-control ">
                                     </div>
                                 </div>
-                                <div class="col-lg-1 col-sm-6 col-12  ms-auto">
-                                    <div class="form-group">
-                                        <a class="btn btn-filters ms-auto"><img
-                                                src="${pageContext.request.contextPath}/assets/img/icons/search-whites.svg" alt="img"></a>
-                                    </div>
+
+                                <div
+                                        class="col-lg-2 col-sm-6 col-12 ms-auto">
+                                    <button type="button"
+                                            class="btn btn-success"
+                                            id="btnSearchOrder">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="16"
+                                             height="16"
+                                             fill="currentColor"
+                                             class="bi bi-search"
+                                             viewBox="0 0 16 16">
+                                            <path
+                                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0">
+                                            </path>
+                                        </svg>
+                                        Tìm Kiếm
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                            <br>
+                        <br>
                     <div class="table-responsive">
                         <table class="table">
 
@@ -327,40 +334,51 @@
                                         <span class="checkmarks"></span>
                                     </label>
                                 </th>
-                                <th>Tên Sản Phẩm</th>
-                                <th>Mã Sản Phẩm</th>
                                 <th>Mã Đơn Hàng</th>
-                                <th>Số Lượng</th>
                                 <th>Ngày Đặt Hàng</th>
                                 <th>Trạng Thái</th>
-                                <th>Xem Phản Hồi</th>
+                                <th>Xem Chi Tiết</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>
-                                <td class="productimgname">
-                                    <a href="javascript:void(0);" class="product-img">
-                                        <img src="${pageContext.request.contextPath}/assets/img/product/product6.jpg" alt="product">
-                                    </a>
-                                    <a href="javascript:void(0);">Macbook Pro</a>
-                                </td>
-                                <td>SP1023</td>
-                                <td>DH1567</td>
-                                <td>20</td>
-                                <td>07/07/2004</td>
-                                <td><span class="badges bg-lightgreen">Delivering </span></td>
-                                <td>
-                                    <a class="me-3"  onclick="viewFeedbackCustomer()">
-                                        <img src="${pageContext.request.contextPath}/assets/img/icons/edit.svg" alt="img">
-                                    </a>
-                                </td>
-                            </tr>
+                            <c:forEach var="order" items="${orders}">
+                                <tr>
+                                    <td>
+                                        <label class="checkboxs">
+                                            <input type="checkbox">
+                                            <span class="checkmarks"></span>
+                                        </label>
+                                    </td>
+                                    <td>${order.orderID}</td>
+                                    <td>
+                                        <fmt:formatDate value="${order.orderDate}" pattern="MM/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                            <span class="badges
+                                                <c:choose>
+                                                    <c:when test="${order.status == 'DELIVERING'}">bg-lightgreen</c:when>
+                                                    <c:when test="${order.status == 'WAITING_PROCESS'}">bg-warning</c:when>
+                                                    <c:when test="${order.status == 'CANCELED'}">bg-danger</c:when>
+                                                    <c:when test="${order.status == 'DELIVERED'}">bg-primary</c:when>
+                                                    <c:when test="${order.status == 'ACCEPTED'}">bg-info</c:when>
+                                                    <c:when test="${order.status == 'REFUNDED'}">bg-secondary</c:when>
+                                                    <c:when test="${order.status == 'FEEDBACKED'}">bg-lightblue</c:when>
+                                                    <c:otherwise>bg-secondary</c:otherwise>
+                                                </c:choose>
+                                            ">
+                                                    ${order.status}
+                                            </span>
+                                    </td>
+                                    <td>
+                                        <a class="me-3" onclick="viewFeedbackCustomer(${order.orderID})">
+                                            <img src="${pageContext.request.contextPath}/assets/img/icons/edit.svg" alt="Edit">
+                                        </a>
+                                        <a class="me-3" onclick="">
+                                            <img src="${pageContext.request.contextPath}/assets/img/icons/product.svg" alt="Product">
+                                        </a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
                             </tbody>
                         </table>
 
@@ -373,8 +391,9 @@
                         </div>
                     </div>
                 </div>
-                </form>
+
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -383,7 +402,7 @@
 
 <div class="modal fade" id="feedback">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" id="feedbackCustomer">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Phản Hồi Của Khách Hàng</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#feedback').modal('hide')">
@@ -391,14 +410,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p id="feedback-description">Sản phẩm như shit làm ăn giả tạo nhưng tôi tạm cho 5 sao.</p>
+                <p id="feedback-description"></p>
                 <div id="feedback-rate">
-                    Rate:
-                    <span style="color: gold;">&#9733;</span>
-                    <span style="color: gold;">&#9733;</span>
-                    <span style="color: gold;">&#9733;</span>
-                    <span style="color: gold;">&#9733;</span>
-                    <span style="color: gold;">&#9733;</span>
+
                 </div>
                 <img id="feedback-image" src="https://cdn.tgdd.vn/Files/2021/09/06/1380709/dell3511-shivtechsmart_1280x774-800-resize.jpg" alt="Feedback Image" style="display: block; max-width: 100%; margin-top: 10px;">
             </div>
@@ -416,20 +430,59 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    // function viewFeedbackCustomer() {
-    //     $('#feedback').modal();
-    // }
-    function viewFeedbackCustomer() {
-        $('#feedback').modal('show');
-    }
-    // var myModal = new bootstrap.Modal(document.getElementById('feedback'));
-    // myModal.show();
 
-
-    $('#btnSearchBuilding').click(function (e){
+    $('#btnSearchOrder').click(function (e){
         e.preventDefault();
+
         $('#listForm').submit();
     })
+
+    function viewFeedbackCustomer(orderID) {
+        $('#feedback').modal();
+        loadFeedback(orderID);
+    }
+    function loadFeedback(orderID) {
+        $.ajax({
+            url: "/admin/customer-order/" + orderID,
+            type: "POST",
+            // data: JSON.stringify(json),
+            // contentType: "application/json",
+            dataType:"json",
+            success: function(response) {
+                $('#feedback-description').text(response.description || 'Không có phản hồi.');
+
+                // Hiển thị số sao đánh giá
+                let rateStars = '';
+                for (let i = 0; i < response.rate; i++) {
+                    rateStars += '<span style="color: gold;">&#9733;</span>';
+                }
+                for (let i = response.rate; i < 5; i++) {
+                    rateStars += '<span style="color: lightgray;">&#9733;</span>';
+                }
+
+
+                $('#feedback-rate').html('Rate: ' + rateStars);
+
+
+                $('#feedback-image').html('Rate: ' + rateStars);
+                if (response.feedbackImage) {
+                    // Gán ảnh dưới dạng Base64 vào thẻ <img>
+                    document.querySelector('#feedback-image').src = 'data:image/jpeg;base64,' + response.feedbackImage;
+                } else {
+                    // Hiển thị thông báo nếu không có ảnh
+                    console.log('No image available');
+                }
+
+                $('#feedback').modal('show');
+                //alert(response.message);
+            },
+
+            error: function (result) {
+                console.log("error");
+                //alert(result.message);
+            }
+        });
+    }
 </script>
 <script src="scripts/pagination.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/jquery-3.6.0.min.js"></script>

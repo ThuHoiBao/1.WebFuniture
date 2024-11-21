@@ -1,6 +1,6 @@
-
 package business;
 
+import business.Furniture;
 import javax.persistence.*;
 
 import java.io.Serializable;
@@ -10,35 +10,31 @@ import java.util.List;
 public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryID;
+    private Long id;
     private String categoryName;
     private String categoryDescription;
-    @Enumerated(EnumType.STRING)
-    private BusinessStatus categoryStatus;
     private String manufacture;
-    
-    @OneToMany
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Furniture> furnitures;
 
     public Category() {
     }
 
-    public Category(Long categoryID, String categoryName, String categoryDescription, BusinessStatus categoryStatus, String manufacture, List<Furniture> furnitures) {
-        this.categoryID = categoryID;
+    public Category(String categoryName, String categoryDescription, String manufacture) {
         this.categoryName = categoryName;
         this.categoryDescription = categoryDescription;
-        this.categoryStatus = categoryStatus;
         this.manufacture = manufacture;
-        this.furnitures = furnitures;
-    }
-    
-    public Long getCategoryID() {
-        return categoryID;
     }
 
-    public void setCategoryID(Long categoryID) {
-        this.categoryID = categoryID;
+    public Long getId() {
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 
     public String getCategoryName() {
         return categoryName;
@@ -54,14 +50,6 @@ public class Category implements Serializable {
 
     public void setCategoryDescription(String categoryDescription) {
         this.categoryDescription = categoryDescription;
-    }
-
-    public BusinessStatus getCategoryStatus() {
-        return categoryStatus;
-    }
-
-    public void setCategoryStatus(BusinessStatus categoryStatus) {
-        this.categoryStatus = categoryStatus;
     }
 
     public String getManufacture() {

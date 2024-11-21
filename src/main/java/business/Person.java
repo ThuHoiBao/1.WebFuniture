@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person implements Serializable {
 
     @Id
