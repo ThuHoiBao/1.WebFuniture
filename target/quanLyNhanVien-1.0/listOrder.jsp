@@ -362,7 +362,7 @@
                                                     <c:when test="${order.status == 'DELIVERED'}">bg-primary</c:when>
                                                     <c:when test="${order.status == 'ACCEPTED'}">bg-info</c:when>
                                                     <c:when test="${order.status == 'REFUNDED'}">bg-secondary</c:when>
-                                                    <c:when test="${order.status == 'FEEDBACKED'}">bg-lightblue</c:when>
+                                                    <c:when test="${order.status == 'FEEDBACKED'}">bg-success</c:when>
                                                     <c:otherwise>bg-secondary</c:otherwise>
                                                 </c:choose>
                                             ">
@@ -373,7 +373,7 @@
                                         <a class="me-3" onclick="viewFeedbackCustomer(${order.orderID})">
                                             <img src="${pageContext.request.contextPath}/assets/img/icons/edit.svg" alt="Edit">
                                         </a>
-                                        <a class="me-3" onclick="">
+                                        <a class="me-3" onclick="viewListProduct(${order.orderID})">
                                             <img src="${pageContext.request.contextPath}/assets/img/icons/product.svg" alt="Product">
                                         </a>
                                     </td>
@@ -412,9 +412,9 @@
             <div class="modal-body">
                 <p id="feedback-description"></p>
                 <div id="feedback-rate">
-
                 </div>
-                <img id="feedback-image" src="https://cdn.tgdd.vn/Files/2021/09/06/1380709/dell3511-shivtechsmart_1280x774-800-resize.jpg" alt="Feedback Image" style="display: block; max-width: 100%; margin-top: 10px;">
+                <div id="imageFeedback"><img id="feedback-image" src="" alt="khách hàng không phản hồi ảnh" style="display: block; max-width: 100%; margin-top: 10px;"></div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#feedback').modal('hide')">Hủy Thao Tác</button>
@@ -423,11 +423,18 @@
     </div>
 </div>
 
-
-
+<script src="scripts/pagination.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/feather.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/jquery.slimscroll.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/jquery.dataTables.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/dataTables.bootstrap4.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/bootstrap.bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/select2/js/select2.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/script.js"></script>
+
 
 <script>
 
@@ -436,7 +443,6 @@
 
         $('#listForm').submit();
     })
-
     function viewFeedbackCustomer(orderID) {
         $('#feedback').modal();
         loadFeedback(orderID);
@@ -465,12 +471,12 @@
 
 
                 $('#feedback-image').html('Rate: ' + rateStars);
-                if (response.feedbackImage) {
-                    // Gán ảnh dưới dạng Base64 vào thẻ <img>
-                    document.querySelector('#feedback-image').src = 'data:image/jpeg;base64,' + response.feedbackImage;
+
+                // load ảnh
+                if (response.feedbackImage !== null) {
+                    $('#feedback-image').attr('src', 'data:image/jpeg;base64,' + response.feedbackImage).show();
                 } else {
-                    // Hiển thị thông báo nếu không có ảnh
-                    console.log('No image available');
+                     // Ẩn ảnh nếu không có
                 }
 
                 $('#feedback').modal('show');
@@ -483,18 +489,30 @@
             }
         });
     }
-</script>
-<script src="scripts/pagination.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/feather.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/jquery.slimscroll.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/jquery.dataTables.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/dataTables.bootstrap4.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/bootstrap.bundle.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/plugins/select2/js/select2.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/plugins/sweetalert/sweetalerts.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/script.js"></script>
 
+
+
+    function viewListProduct(orderID) {
+       // $('#feedback').modal();
+        loadListProduct(orderID);
+    }
+    function loadListProduct(orderID) {
+        $.ajax({
+            url: "/admin/customer-order/" + orderID,
+            type: "PUT",
+            // data: JSON.stringify(json),
+            // contentType: "application/json",
+            dataType:"json",
+            success: function(response) {
+
+            },
+
+            error: function (result) {
+                console.log("error");
+                //alert(result.message);
+            }
+        });
+    }
+</script>
 </body>
 </html>
