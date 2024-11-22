@@ -11,7 +11,6 @@
         if (status !== 'Active') {
             $('#customerStatus').modal('show');
         } else {
-            // Trạng thái là 'Active', thực hiện xóa ngay lập tức
             btnDeleteCustomer(customerId);
         }
     }

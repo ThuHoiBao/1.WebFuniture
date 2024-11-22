@@ -1,15 +1,15 @@
 package controller.customer;
 
 import DTO.requestDTO.OrderRequestDTO;
-import DTO.responseDTO.FeedbackResponseDTO;
-import DTO.responseDTO.OrderResponseDTO;
-import DTO.responseDTO.ProductOfOrderResponseDTO;
+import DTO.responseDTO.*;
 import business.Order;
 import com.google.gson.Gson;
 import service.IFeedbackService;
+import service.IManagermentCustomerService;
 import service.IOrderService;
 import service.IProductOfOrderService;
 import service.Impl.FeedbackServiceImpl;
+import service.Impl.ManagermentCustomerServiceImpl;
 import service.Impl.OrderServiceImpl;
 import service.Impl.ProductOfOrderServiceImpl;
 
@@ -32,6 +32,7 @@ public class ManagermentOrderController extends HttpServlet {
     private IOrderService orderService=new OrderServiceImpl();
     private IFeedbackService feedbackService=new FeedbackServiceImpl();
     private IProductOfOrderService productOfOrderService=new ProductOfOrderServiceImpl();
+    private IManagermentCustomerService managermentCustomerService=new ManagermentCustomerServiceImpl();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -57,9 +58,11 @@ public class ManagermentOrderController extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        req.setAttribute("searchOrder", searchOrder);
         List<OrderResponseDTO> orders = orderService.getOrder(searchOrder);
+        CustomerResponseDTO responseDTO = managermentCustomerService.getCustomerById(customerId);
         req.setAttribute("orders", orders);
+        req.setAttribute("searchOrder", searchOrder);
+        req.setAttribute("customer", responseDTO);
         String url = "/listOrder.jsp";
         getServletContext().getRequestDispatcher(url).forward(req, resp);
     }
@@ -80,7 +83,6 @@ public class ManagermentOrderController extends HttpServlet {
                 resp.getWriter().write("Invalid ID format");
             }
         } else {
-
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("Missing or invalid path info");
         }

@@ -1,5 +1,6 @@
 package convert;
 
+import DTO.responseDTO.CustomerByIdResponseDTO;
 import DTO.responseDTO.CustomerResponseDTO;
 import business.Customer;
 import business.Address;
@@ -21,6 +22,16 @@ public class CustomerConvert {
             dto.setAddress(fullAddress);
 
         }
+        // Chuyển đổi mảng byte của feedbackImage thành chuỗi Base64
+        if (customer.getAvatar() != null) {
+            String base64Image = Base64.getEncoder().encodeToString(customer.getAvatar());
+            dto.setAvatar(base64Image);
+        }
+        return dto;
+    }
+
+    public static CustomerByIdResponseDTO convertToDTOCustomer (Customer customer) {
+        CustomerByIdResponseDTO dto = modelMapper.map(customer, CustomerByIdResponseDTO.class);
         // Chuyển đổi mảng byte của feedbackImage thành chuỗi Base64
         if (customer.getAvatar() != null) {
             String base64Image = Base64.getEncoder().encodeToString(customer.getAvatar());

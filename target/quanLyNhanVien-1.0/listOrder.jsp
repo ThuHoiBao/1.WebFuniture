@@ -256,36 +256,61 @@
     <div class="page-wrapper">
         <div class="content">
 
-            <div class="page-header">
-                <div class="page-btn">
-                    <div class="page-title" style="display: flex; flex-direction: column; align-items: flex-start;">
-                        <div style="display: flex; align-items: center;">
-                            <a class="product-img">
-                                <img src="${pageContext.request.contextPath}/assets/img/customer/customer1.jpg" alt="Hình đại diện" style="border-radius: 50%; width: 50px; height: 50px; object-fit: cover;">
-                            </a>
-                            <a style="font-size: 16px; font-weight: bold; margin-left: 10px; vertical-align: middle; display: inline-block;">Trần Anh Thư</a>
-                            <a style="font-size: 16px; font-weight: bold; margin-left: 10px; vertical-align: middle; display: inline-block;">trananhthu270904@gmail.com</a>
+            <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 20px; border-bottom: 1px solid #ddd;">
+                <!-- Phần thông tin khách hàng -->
+                <div class="customer-profile" style="display: flex; gap: 20px; align-items: stretch; height: auto;">
+                    <!-- Ảnh đại diện -->
+                    <div href="javascript:void(0);" class="product-img" style="flex-shrink: 0; height: auto; display: flex; align-items: stretch;">
+                        <img src="data:image/jpeg;base64,${customer.avatar}"
+                             alt="Avatar"
+                             style="height: 100%; object-fit: cover; display: block;" />
+                    </div>
+                    <!-- Thông tin khách hàng -->
+                    <div id="customer-info">
+                        <div>
+                            <span>Họ và tên:</span>
+                            <span>${customer.name}</span>
                         </div>
-                </div>
-
-                    <div class="page-title">
-                        <h4>Quản Lý Đơn Hàng</h4>
-                        <h6>Tìm kiếm/xem phản hồi/xem chi tiết đơn hàng </h6>
+                        <div>
+                            <span>Số điện thoại:</span>
+                            <span>${customer.phone}</span>
+                        </div>
+                        <div>
+                            <span>Email:</span>
+                            <span>${customer.email}</span>
+                        </div>
+                        <div>
+                            <span>Địa chỉ:</span>
+                            <span>${customer.address}</span>
+                        </div>
+                        <div>
+                            <span>Trạng thái:</span>
+                            <span>${customer.status}</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Phần Quản lý đơn hàng -->
+                <div class="page-title" style="text-align: right; margin-top: 20px;">
+                    <h4 style="font-weight: bold; font-size: 1.8em; margin: 0; font-family: 'Poppins', sans-serif; color: #333;">Quản Lý Đơn Hàng</h4>
+                    <h6 style="font-size: 1.1em; color: #777; margin: 5px 0 0; font-family: 'Roboto', sans-serif;">Tìm kiếm/xem phản hồi/xem chi tiết đơn hàng</h6>
+                </div>
             </div>
-            </div>
-        <form action="${pageContext.request.contextPath}/admin/customer-order" method="get"
+
+            <form action="${pageContext.request.contextPath}/admin/customer-order" method="get"
               id="listForm">
-            <div class="card">
+                <div class="card">
 
                     <div class="card-body">
                     <div class="search-header"
                          style="text-align: left; margin-bottom: 15px; padding: 10px; border-left: 5px solid #28a745; border-radius: 5px;">
                         <h6 class="search-title"
-                            style="font-size: 1.3em; font-weight: 500; color: #1a1e21; font-family: 'Poppins', sans-serif; margin: 0; padding-left: 10px; display: flex; align-items: center; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">
-                            🔍 Tìm Kiếm Đơn Hàng
+                            style="font-size: 1.2em; font-weight: 400; color: #4a4a4a; font-family: 'Poppins', sans-serif; font-style: italic; margin: 0;
+           padding: 8px 12px; display: flex; align-items: center; background-color: #f9fbfd; border-radius: 8px;
+           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1); letter-spacing: 0.5px;">
+                            🔍 <span style="margin-left: 10px;">Tìm Kiếm Đơn Hàng</span>
                         </h6>
+
                     </div>
                         <div class="card-body pb-0">
                             <div class="row">
@@ -370,10 +395,10 @@
                                             </span>
                                     </td>
                                     <td>
-                                        <a class="me-3" onclick="viewFeedbackCustomer(${order.orderID})">
+                                        <a class="me-3" onclick="viewFeedbackCustomer(${order.orderID})" title="Xem Phản Hồi">
                                             <img src="${pageContext.request.contextPath}/assets/img/icons/edit.svg" alt="Edit">
                                         </a>
-                                        <a class="me-3" onclick="viewListProduct(${order.orderID})">
+                                        <a class="me-3" onclick="viewListProduct(${order.orderID})" title="Xem Chi Tiết">
                                             <img src="${pageContext.request.contextPath}/assets/img/icons/product.svg" alt="Product">
                                         </a>
                                     </td>
@@ -477,6 +502,9 @@
 
 <script src="${pageContext.request.contextPath}/ordercustomer/pageorderCustomer.js"></script>
 <script src="${pageContext.request.contextPath}/ordercustomer/loadAndSearchOrder.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/ordercustomer/customer.css">
+
+
 <jsp:include page="${pageContext.request.contextPath}/ordercustomer/loadFeedback.jsp"></jsp:include>
 <jsp:include page="${pageContext.request.contextPath}/ordercustomer/loadProductOfOrder.jsp"></jsp:include>
 

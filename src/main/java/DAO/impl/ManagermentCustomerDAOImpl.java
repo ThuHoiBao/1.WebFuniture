@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class ManagermentCustomerDAOImpl implements IManagermentCustomerDAO {
@@ -23,26 +24,20 @@ public class ManagermentCustomerDAOImpl implements IManagermentCustomerDAO {
         EntityManager em = emf.createEntityManager();
         try {
             StringBuilder queryBuilder = new StringBuilder("SELECT c FROM Customer c WHERE 1=1");
-
             // Thêm điều kiện nếu email được cung cấp
             if (reqDTO.getEmail() != null && !reqDTO.getEmail().isEmpty()) {
                 queryBuilder.append(" AND c.email LIKE :email");
             }
-
             // Thêm điều kiện nếu phone được cung cấp
             if (reqDTO.getPhone() != null && !reqDTO.getPhone().isEmpty()) {
                 queryBuilder.append(" AND c.phone LIKE :phone");
             }
-
             // Thêm điều kiện nếu name được cung cấp
             if (reqDTO.getName() != null && !reqDTO.getName().isEmpty()) {
                 queryBuilder.append(" AND c.name LIKE :name");
             }
-
-            // Tạo truy vấn
             TypedQuery<Customer> query = em.createQuery(queryBuilder.toString(), Customer.class);
 
-            // Thiết lập giá trị tham số
             if (reqDTO.getEmail() != null && !reqDTO.getEmail().isEmpty()) {
                 query.setParameter("email", "%" + reqDTO.getEmail() + "%");
             }
@@ -72,24 +67,24 @@ public class ManagermentCustomerDAOImpl implements IManagermentCustomerDAO {
             em.close();
         }
     }
-@Override
-public void updateCustomerStatus(List<String> customerIds, String status) {
-    EntityManager em = emf.createEntityManager();
-    try {
-        em.getTransaction().begin();
-        // Truy vấn JPQL(Java Persistence Query Language) để cập nhật trạng thái hàng loạt
-        String jpql = "UPDATE Customer c SET c.status = :status WHERE c.personID IN :ids";
-        em.createQuery(jpql)
-                .setParameter("status", status)
-                .setParameter("ids", customerIds)
-                .executeUpdate();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        throw new RuntimeException("Có lỗi xảy ra khi cập nhật trạng thái hàng loạt: " + e.getMessage(), e);
-    } finally {
-        em.close();
-    }
-}
 
+    @Override
+    public void updateCustomerStatus(List<String> customerIds, String status) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            // Truy vấn JPQL(Java Persistence Query Language) để cập nhật trạng thái hàng loạt
+            String jpql = "UPDATE Customer c SET c.status = :status WHERE c.personID IN :ids";
+            em.createQuery(jpql)
+                    .setParameter("status", status)
+                    .setParameter("ids", customerIds)
+                    .executeUpdate();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw new RuntimeException("Có lỗi xảy ra khi cập nhật trạng thái hàng loạt: " + e.getMessage(), e);
+        } finally {
+            em.close();
+        }
+    }
 }

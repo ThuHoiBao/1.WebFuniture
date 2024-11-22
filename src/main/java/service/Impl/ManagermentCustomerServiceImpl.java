@@ -2,6 +2,7 @@ package service.Impl;
 
 import DAO.IManagermentCustomerDAO;
 import DAO.impl.ManagermentCustomerDAOImpl;
+import DTO.responseDTO.CustomerByIdResponseDTO;
 import business.Customer;
 import DTO.requestDTO.CustomerRequestDTO;
 import DTO.responseDTO.CustomerResponseDTO;
@@ -91,6 +92,14 @@ public class ManagermentCustomerServiceImpl implements IManagermentCustomerServi
             });
         }
         executorService.shutdown(); // Đảm bảo dừng ExecutorService sau khi hoàn thành
+    }
+
+    @Override
+    public CustomerResponseDTO getCustomerById(String customerId) {
+        Customer customer = customerDAO.findById(customerId);
+        CustomerResponseDTO responseDTO = new CustomerResponseDTO();
+        responseDTO=customerConvert.convertToDTO(customer);
+        return responseDTO;
     }
 }
 
