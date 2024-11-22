@@ -19,7 +19,7 @@ public class FurnitureDAOImpl implements IFurnitureDAO {
     @Override
     public List<Furniture> getFurnituresByOrderId(Long orderId) {
         EntityManager em = emf.createEntityManager();
-        String jpql = "SELECT f FROM Furniture f WHERE f.order.orderID = :orderId";
+        String jpql = "SELECT f FROM Furniture f WHERE f.order.id = :orderId";
         TypedQuery<Furniture> query = em.createQuery(jpql, Furniture.class);
         query.setParameter("orderId", orderId);
         return query.getResultList();

@@ -13,7 +13,7 @@ public class Customer extends Person {
 
     }
 
-    public Customer(String personID, String name, Date birthDate, Address address, String email, String password, String phone, byte[] avatar, String googleLogin, String status) {
+    public Customer(Long personID, String name, Date birthDate, Address address, String email, String password, String phone, byte[] avatar, String googleLogin, String status) {
         super(personID, name, birthDate, address, email, password, phone, avatar);
         this.googleLogin = googleLogin;
         this.status = status;

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IManagermentCustomerService {
     List<CustomerResponseDTO> getAllCustomers(CustomerRequestDTO reqDTO);
-    void lockCustomerStatus(List<String> customerIds, String reason);
-    void unlockCustomerStatus(List<String> customerIds);
-    CustomerResponseDTO getCustomerById(String customerId);
+    void lockCustomerStatus(List<Long> customerIds, String reason);
+    void unlockCustomerStatus(List<Long> customerIds);
+    CustomerResponseDTO getCustomerById(Long customerId);
 }

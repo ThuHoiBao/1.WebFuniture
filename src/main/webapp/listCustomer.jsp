@@ -34,9 +34,9 @@
 </head>
 
 <body>
-<%--<div id="global-loader">--%>
-<%--    <div class="whirly-loader"> </div>--%>
-<%--</div>--%>
+<div id="global-loader">
+    <div class="whirly-loader"> </div>
+</div>
 
 <div class="main-wrapper">
 
@@ -367,14 +367,14 @@
                         <%--&lt;%&ndash; </div>&ndash;%&gt;--%>
                         <%--&lt;%&ndash; </div>&ndash;%&gt;--%>
                         <%-- </div>--%>
-                        <div class="search-header"
+                        <div class="search-header">
                             <h6 class="search-title"
                                 style="font-size: 1.2em; font-weight: 400; color: #4a4a4a; font-family: 'Poppins', sans-serif; font-style: italic; margin: 0;
            padding: 8px 12px; display: flex; align-items: center; background-color: #f9fbfd; border-radius: 8px;
            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1); letter-spacing: 0.5px;">
                                 🔍 <span style="margin-left: 10px;">Tìm Kiếm Khách Hàng</span>
                             </h6>
-                    </div>
+                        </div>
                         <div class="card-body pb-0">
 
                             <div class="row">
@@ -503,9 +503,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+           </div>
         </div>
-
     </form>
 </div>
 <!-- Modal Xác nhận Xóa -->
@@ -735,10 +734,9 @@
         src="${pageContext.request.contextPath}/assets/plugins/sweetalert/sweetalerts.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/script.js"></script>
 
-<script src="${pageContext.request.contextPath}/managermentCustomer/loader.js"></script>
+<%--<script src="${pageContext.request.contextPath}/managermentCustomer/loader.js"></script>--%>
 
 <script src="${pageContext.request.contextPath}/managermentCustomer/searchCustomer.js"></script>
-
 <script src="${pageContext.request.contextPath}/managermentCustomer/pagination.js"></script>
 
 <jsp:include page="${pageContext.request.contextPath}/managermentCustomer/lockCustomer.jsp"></jsp:include>

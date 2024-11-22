@@ -18,7 +18,7 @@ public class FeedbackDAOImpl implements IFeedbackDAO {
     @Override
     public Review getFeedback(Long orderID) {
         EntityManager em = emf.createEntityManager();
-        StringBuilder query = new StringBuilder("SELECT r FROM Review r WHERE r.order.orderID = :orderID");
+        StringBuilder query = new StringBuilder("SELECT r FROM Review r WHERE r.order.id = :orderID");
         TypedQuery<Review> queryReview = em.createQuery(query.toString(), Review.class);
         queryReview.setParameter("orderID", orderID);
         return queryReview.getSingleResult();

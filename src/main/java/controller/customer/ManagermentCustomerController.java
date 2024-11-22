@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,14 +25,14 @@ public class ManagermentCustomerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-//        Address address = new Address();
-//        address.setStreet("123 Main Street");
-//        address.setCity("Hanoi");
-//        address.setProvince("Hanoi Province");
-//        address.setCountry("Vietnam");
-//
-//        // Lưu địa chỉ vào database
-//        addressDAO.insertAddress(address);
+        Address address = new Address();
+        address.setStreet("123 Main Street");
+        address.setCity("Hanoi");
+        address.setProvince("Hanoi Province");
+        address.setCountry("Vietnam");
+
+        // Lưu địa chỉ vào database
+        addressDAO.insertAddress(address);
         CustomerRequestDTO reqDTO = new CustomerRequestDTO();
         reqDTO.setName(req.getParameter("name"));
         reqDTO.setPhone(req.getParameter("phone"));
@@ -51,7 +52,17 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 
     if (pathInfo != null && pathInfo.length() > 1) {
         String[] idArray = pathInfo.substring(1).split(",");
-        List<String> ids = Arrays.asList(idArray);
+        // Chuyển đổi từ String[] sang List<Long>
+        List<Long> ids = new ArrayList<>();
+        for (String id : idArray) {
+            try {
+                ids.add(Long.parseLong(id)); // Chuyển đổi từng phần tử String sang Long
+            } catch (NumberFormatException e) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().write("ID không hợp lệ: " + id);
+                return;
+            }
+        }
 
         if (action == null || action.isEmpty()) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

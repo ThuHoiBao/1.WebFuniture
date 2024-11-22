@@ -18,11 +18,10 @@ import java.util.List;
 public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long orderID;
+    private Long id;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Furniture> listFurniture;
-
     
     @OneToOne
     @JoinColumn(name = "CUSTOMERID")
@@ -43,13 +42,13 @@ public class Order implements Serializable {
         this.orderDate = orderDate;
         this.status = status;
     }
-   
-    public Long getOrderID() {
-        return orderID;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setOrderID(Long orderID) {
-        this.orderID = orderID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public List<Furniture> getListOrderItem() {

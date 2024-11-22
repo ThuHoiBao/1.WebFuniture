@@ -26,9 +26,6 @@ public class ProductOfOrderServiceImpl implements IProductOfOrderService {
             if (dto.getCategoryName() == null) {
                 dto = FurnitureConvert.convertToDTO(furniture);
             }
-//            if (furniture.getCategory().getManufacture() != null) {
-//                dto.setManufacture(furniture.getCategory().getManufacture());
-//            }
             if (dto.getTotalPrice() == null) {
                 dto.setTotalPrice(0L);
             }

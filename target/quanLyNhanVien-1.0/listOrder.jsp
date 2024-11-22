@@ -317,7 +317,7 @@
                                 <input type="hidden" name="customerId" value="${searchOrder.customerId}" placeholder="Nhập mã khách hàng...">
                                 <div class="col-lg-2 col-sm-6 col-12">
                                     <div class="form-group">
-                                        <input type="text" name="orderId"  value="${searchOrder.orderID}" placeholder="Nhập mã sản phẩm...">
+                                        <input type="text" name="id"  value="${searchOrder.id}" placeholder="Nhập mã sản phẩm...">
                                     </div>
                                 </div>
 
@@ -374,7 +374,7 @@
                                             <span class="checkmarks"></span>
                                         </label>
                                     </td>
-                                    <td>${order.orderID}</td>
+                                    <td>${order.id}</td>
                                     <td>
                                         <fmt:formatDate value="${order.orderDate}" pattern="MM/dd/yyyy" />
                                     </td>
@@ -395,10 +395,10 @@
                                             </span>
                                     </td>
                                     <td>
-                                        <a class="me-3" onclick="viewFeedbackCustomer(${order.orderID})" title="Xem Phản Hồi">
+                                        <a class="me-3" onclick="viewFeedbackCustomer(${order.id})" title="Xem Phản Hồi">
                                             <img src="${pageContext.request.contextPath}/assets/img/icons/edit.svg" alt="Edit">
                                         </a>
-                                        <a class="me-3" onclick="viewListProduct(${order.orderID})" title="Xem Chi Tiết">
+                                        <a class="me-3" onclick="viewListProduct(${order.id})" title="Xem Chi Tiết">
                                             <img src="${pageContext.request.contextPath}/assets/img/icons/product.svg" alt="Product">
                                         </a>
                                     </td>
@@ -406,7 +406,6 @@
                             </c:forEach>
                             </tbody>
                         </table>
-
                     </div>
                         <!-- Phân trang -->
                         <div class="container mt-5">
@@ -439,8 +438,9 @@
                 <p id="feedback-description"></p>
                 <div id="feedback-rate">
                 </div>
-                <div id="imageFeedback"><img id="feedback-image" src="" alt="khách hàng không phản hồi ảnh" style="display: block; max-width: 100%; margin-top: 10px;"></div>
-
+                <div id="imageFeedback" style="margin-top: 10px;">
+                    <!-- Danh sách ảnh sẽ được thêm vào đây bằng JavaScript -->
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#feedback').modal('hide')">Hủy Thao Tác</button>
@@ -482,6 +482,25 @@
             </div>
             <div class="modal-footer" style="background: #f8f9fa; border-top: 1px solid #dee2e6;">
                 <button type="button" class="btn btn-success" data-dismiss="modal" style="border-radius: 5px;" onclick="$('#productOfOrderList').modal('hide')">Hủy Thao Tác</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for showing large image -->
+<!-- Modal for showing large image -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#imageModal').modal('hide')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Ảnh lớn sẽ hiển thị ở đây -->
+                <img id="largeImage" src="" alt="Large Feedback Image" style="width: 100%; max-height: 600px;"/>
             </div>
         </div>
     </div>

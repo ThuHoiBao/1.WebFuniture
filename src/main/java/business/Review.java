@@ -3,7 +3,9 @@ import business.Furniture;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @Entity
 public class Review implements Serializable {
@@ -16,8 +18,7 @@ public class Review implements Serializable {
 
     private String description;
     private int rate;
-    @Lob
-    private byte[] feedbackImage; // Thay đổi kiểu dữ liệu thành byte[]
+    // Thay đổi kiểu dữ liệu thành byte[]
 
     @OneToOne
     @JoinColumn(name = "CATEGORYID")
@@ -27,9 +28,32 @@ public class Review implements Serializable {
     @JoinColumn(name = "ORDERID")
     private  Order  order;
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List <ImageFeedback> imageFeedbacks = new ArrayList<>();
+
+
     @Transient // Không lưu thuộc tính này vào cơ sở dữ liệu
     private String base64Data;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<ImageFeedback> getImageFeedbacks() {
+        return imageFeedbacks;
+    }
+
+    public void setImageFeedbacks(List<ImageFeedback> imageFeedbacks) {
+        this.imageFeedbacks = imageFeedbacks;
+    }
+
+    public String getBase64Data() {
+        return base64Data;
+    }
 
     public Long getID() {
         return id;
@@ -79,22 +103,8 @@ public class Review implements Serializable {
         this.rate = rate;
     }
 
-    public byte[] getFeedbackImage() {
-        return feedbackImage;
-    }
-
-    public void setFeedbackImage(byte[] feedbackImage) {
-        this.feedbackImage = feedbackImage;
-    }
 
     // Constructor, getters và setters
-    public String getBase64Data() {
-        if (this.feedbackImage != null) {
-            String base64String = Base64.getEncoder().encodeToString(this.feedbackImage);
-            System.out.println("Base64 Data: " + base64String); // In ra giá trị Base64
-            return base64String;        }
-        return null;  // Trả về null nếu không có dữ liệu
-    }
     public void setBase64Data(String base64Data) {
         this.base64Data = base64Data;
     }

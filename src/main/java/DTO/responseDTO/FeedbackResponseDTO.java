@@ -1,9 +1,14 @@
 package DTO.responseDTO;
 
+import business.ImageFeedback;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class FeedbackResponseDTO {
     private String description;
     private int rate;
-    private String feedbackImage;
+    private List<String> imageFeedbacks = new ArrayList<>();
 
     public String getDescription() {
         return description;
@@ -21,11 +26,11 @@ public class FeedbackResponseDTO {
         this.rate = rate;
     }
 
-    public String getFeedbackImage() {
-        return feedbackImage;
+    public List<String> getImageFeedbacks() {
+        return imageFeedbacks;
     }
 
-    public void setFeedbackImage(String feedbackImage) {
-        this.feedbackImage = feedbackImage;
+    public void setImageFeedbacks(List<String> imageFeedbacks) {
+        this.imageFeedbacks = imageFeedbacks;
     }
 }

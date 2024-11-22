@@ -18,7 +18,7 @@ public class Cart implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @OneToMany
+    @ManyToMany
     private List<Furniture> listFurniture;
     
     @OneToOne

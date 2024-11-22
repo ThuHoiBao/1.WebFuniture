@@ -35,21 +35,34 @@
 
                 $('#feedback-image').html('Rate: ' + rateStars);
 
-                // load ảnh
-                if (response.feedbackImage !== null) {
-                    $('#feedback-image').attr('src', 'data:image/jpeg;base64,' + response.feedbackImage).show();
+                if (response.imageFeedbacks && response.imageFeedbacks.length > 0) {
+                    var imageHtml = ''; // HTML cho danh sách ảnh
+                    response.imageFeedbacks.forEach(function(imageBase64, index) {
+                        imageHtml += '<a style="display: inline-block; margin: 5px; cursor: pointer;" onclick="showLargeImage(\'' + imageBase64 + '\')">' +
+                            '<img src="data:image/jpeg;base64,' + imageBase64 + '" ' +
+                            'alt="Feedback Image ' + (index + 1) + '" ' +
+                            'style="max-width: 100px; max-height: 100px; border: 1px solid #ccc; "/>' +
+                            '</a>';
+                    });
+                    $('#imageFeedback').html(imageHtml).show(); // Hiển thị danh sách ảnh trong container
                 } else {
-                    // Ẩn ảnh nếu không có
+                    $('#imageFeedback').html('<p>Không có ảnh phản hồi.</p>').show(); // Hiển thị thông báo nếu không có ảnh
                 }
 
+                // Hàm để hiển thị ảnh lớn trong modal
                 $('#feedback').modal('show');
                 //alert(response.message);
             },
-
             error: function (result) {
                 console.log("error");
                 //alert(result.message);
             }
         });
+    }
+    function showLargeImage(imageBase64) {
+        // Đặt ảnh trong modal
+        $('#largeImage').attr('src', 'data:image/jpeg;base64,' + imageBase64);
+        // Hiển thị modal
+        $('#imageModal').modal('show');
     }
 </script>

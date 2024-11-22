@@ -8,10 +8,10 @@ import java.util.Date;
 public abstract class Person implements Serializable {
 
     @Id
-    private String personID;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long personID;
 
     private String name;
-    
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
@@ -27,7 +27,7 @@ public abstract class Person implements Serializable {
     public Person() {
     }
 
-    public Person(String personID, String name, Date birthDate, Address address, String email, String password, String phone, byte[] avatar) {
+    public Person(Long personID, String name, Date birthDate, Address address, String email, String password, String phone, byte[] avatar) {
         this.personID = personID;
         this.name = name;
         this.birthDate = birthDate;
@@ -38,11 +38,11 @@ public abstract class Person implements Serializable {
         this.avatar = avatar;
     }
 
-    public String getPersonID() {
+    public Long getPersonID() {
         return personID;
     }
 
-    public void setPersonID(String personID) {
+    public void setPersonID(Long personID) {
         this.personID = personID;
     }
 

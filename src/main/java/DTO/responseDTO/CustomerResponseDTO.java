@@ -2,7 +2,7 @@ package DTO.responseDTO;
 
 
 public class CustomerResponseDTO {
-    private  String personID;
+    private  Long personID;
     private  String name;
     private  String phone;
     private  String address;
@@ -10,11 +10,11 @@ public class CustomerResponseDTO {
     private  String status;
     private  String avatar;
 
-    public String getPersonID() {
+    public Long getPersonID() {
         return personID;
     }
 
-    public void setPersonID(String personID) {
+    public void setPersonID(Long personID) {
         this.personID = personID;
     }
 

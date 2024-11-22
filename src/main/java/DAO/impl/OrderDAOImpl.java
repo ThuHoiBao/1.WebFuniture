@@ -23,8 +23,8 @@ public class OrderDAOImpl implements IOrderDAO {
             // Bắt đầu xây dựng câu truy vấn JPQL
             StringBuilder jpql = new StringBuilder("SELECT o FROM Order o WHERE o.customer.personID = :customerId");
 
-            if (orderRequestDTO.getOrderID() != null) {
-                jpql.append(" AND o.orderID = :orderId");
+            if (orderRequestDTO.getId() != null) {
+                jpql.append(" AND o.id = :orderId");
             }
             if (orderRequestDTO.getOrderDate() != null) {
                 jpql.append(" AND o.orderDate = :orderDate");
@@ -33,8 +33,8 @@ public class OrderDAOImpl implements IOrderDAO {
             TypedQuery<Order> query = em.createQuery(jpql.toString(), Order.class);
             query.setParameter("customerId", orderRequestDTO.getCustomerId());
 
-            if (orderRequestDTO.getOrderID()!= null) {
-                query.setParameter("orderId", orderRequestDTO.getOrderID());
+            if (orderRequestDTO.getId()!= null) {
+                query.setParameter("orderId", orderRequestDTO.getId());
             }
             if (orderRequestDTO.getOrderDate() != null) {
                 query.setParameter("orderDate", orderRequestDTO.getOrderDate());

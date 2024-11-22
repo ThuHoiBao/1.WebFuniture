@@ -36,20 +36,28 @@ public class ManagermentOrderController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String customerId = req.getParameter("customerId");
-        String orderId = req.getParameter("orderId");
+
+        String customerIdStr = req.getParameter("customerId");
+        Long customerId = Long.parseLong(customerIdStr);
+
+        String orderIdStr = req.getParameter("id");
+
         String orderDateParam = req.getParameter("orderDate");
 
         OrderRequestDTO searchOrder = new OrderRequestDTO();
         searchOrder.setCustomerId(customerId);
 
-        if (orderId != null && !orderId.trim().isEmpty()) {
+        Long orderId = null;
+
+        if (orderIdStr != null && !orderIdStr.trim().isEmpty()) {
             try {
-                searchOrder.setOrderID(Long.parseLong(orderId));
+                orderId = Long.parseLong(orderIdStr);
+                searchOrder.setId(orderId);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         }
+
         if (orderDateParam != null && !orderDateParam.isEmpty()) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             try {

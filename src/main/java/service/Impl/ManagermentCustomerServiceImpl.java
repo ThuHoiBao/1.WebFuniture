@@ -33,13 +33,13 @@ public class ManagermentCustomerServiceImpl implements IManagermentCustomerServi
     }
 
     @Override
-    public void lockCustomerStatus(List<String> customerIds, String reason) {
+    public void lockCustomerStatus(List<Long> customerIds, String reason) {
         // Cập nhật trạng thái hàng loạt
         customerDAO.updateCustomerStatus(customerIds, "InActive");
 
         // Gửi email thông báo song song
         ExecutorService executorService = Executors.newFixedThreadPool(10); // Pool với 10 luồng
-        for (String customerId : customerIds) {
+        for (Long customerId : customerIds) {
             executorService.submit(() -> {
                 Customer customer = customerDAO.findById(customerId);
                 if (customer != null) {
@@ -64,12 +64,12 @@ public class ManagermentCustomerServiceImpl implements IManagermentCustomerServi
 
 
     @Override
-    public void unlockCustomerStatus(List<String> customerIds) {
+    public void unlockCustomerStatus(List<Long> customerIds) {
         customerDAO.updateCustomerStatus(customerIds, "Active");
 
         // Gửi email thông báo song song
         ExecutorService executorService = Executors.newFixedThreadPool(10); // Pool với 10 luồng
-        for (String customerId : customerIds) {
+        for (Long customerId : customerIds) {
             executorService.submit(() -> {
                 Customer customer = customerDAO.findById(customerId);
                 if (customer != null) {
@@ -95,7 +95,7 @@ public class ManagermentCustomerServiceImpl implements IManagermentCustomerServi
     }
 
     @Override
-    public CustomerResponseDTO getCustomerById(String customerId) {
+    public CustomerResponseDTO getCustomerById(Long customerId) {
         Customer customer = customerDAO.findById(customerId);
         CustomerResponseDTO responseDTO = new CustomerResponseDTO();
         responseDTO=customerConvert.convertToDTO(customer);

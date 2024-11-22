@@ -14,23 +14,18 @@ public class Furniture implements Serializable {
     private String furnitureColor;
     private Long furniturePrice;
     private String furnitureDescription;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id") // Cột `order_id` trong bảng FURNITURE
+    private Order order;
+    @ManyToMany(mappedBy = "listFurniture")
+    private List<Cart> carts;
+
     @Enumerated(EnumType.STRING)
     private FurnitureStatus furnitureStatus;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "order_id") // Tạo khóa ngoại trực tiếp đến bảng Order
-    private Order order;
 
     @OneToMany(mappedBy = "furniture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> furnitureImages;
@@ -43,8 +38,11 @@ public class Furniture implements Serializable {
         this.category = category;
         this.furnitureImages = furnitureImages;
     }
+
+
     public Furniture() {
     }
+
     public Long getId() {
         return id;
     }
@@ -98,5 +96,19 @@ public class Furniture implements Serializable {
 
     public void setFurnitureStatus(FurnitureStatus furnitureStatus) {
         this.furnitureStatus = furnitureStatus;
+    }
+    public Image getRepresentativeImage() {
+        if (furnitureImages != null && !furnitureImages.isEmpty()) {
+            return furnitureImages.get(0); // Lấy ảnh đầu tiên làm đại diện
+        }
+        return null; // Trả về null nếu không có ảnh nào
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

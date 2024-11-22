@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IManagermentCustomerDAO {
     List<Customer> getAllCustomer(CustomerRequestDTO reqDTO);
-    Customer findById(String customerId);
-    void updateCustomerStatus(List<String> customerIds, String status);
+    Customer findById(Long customerId);
+    void updateCustomerStatus(List<Long> customerIds, String status);
 
 }

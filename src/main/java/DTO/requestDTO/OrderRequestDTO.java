@@ -3,22 +3,23 @@ package DTO.requestDTO;
 import java.util.Date;
 
 public class OrderRequestDTO {
-    private Long orderID;
+    private Long id;
     private Date orderDate;
-    private String CustomerId;
+    private Long CustomerId;
 
-    public String getCustomerId() {
+    public Long getCustomerId() {
         return CustomerId;
     }
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(Long customerId) {
         CustomerId = customerId;
     }
-    public Long getOrderID() {
-        return orderID;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setOrderID(Long orderID) {
-        this.orderID = orderID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Date getOrderDate() {

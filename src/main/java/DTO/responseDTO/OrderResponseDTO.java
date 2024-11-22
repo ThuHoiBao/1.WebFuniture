@@ -5,16 +5,16 @@ import business.OrderStatus;
 import java.util.Date;
 
 public class OrderResponseDTO {
-    private Long orderID;
+    private Long id;
     private Date orderDate;
     private String status;
 
-    public Long getOrderID() {
-        return orderID;
+    public Long getId() {
+        return id;
     }
 
-    public void setOrderID(Long orderID) {
-        this.orderID = orderID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Date getOrderDate() {

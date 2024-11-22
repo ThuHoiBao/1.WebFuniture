@@ -59,7 +59,7 @@ public class ManagermentCustomerDAOImpl implements IManagermentCustomerDAO {
     }
 
     @Override
-    public Customer findById(String customerId) {
+    public Customer findById(Long customerId) {
         EntityManager em = emf.createEntityManager();
         try {
             return em.find(Customer.class, customerId);
@@ -69,7 +69,7 @@ public class ManagermentCustomerDAOImpl implements IManagermentCustomerDAO {
     }
 
     @Override
-    public void updateCustomerStatus(List<String> customerIds, String status) {
+    public void updateCustomerStatus(List<Long> customerIds, String status) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();

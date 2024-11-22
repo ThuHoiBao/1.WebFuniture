@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const rowsPerPage = 3; // Số hàng trên mỗi trang
-    let currentPage = 1; // Trang hiện tại
+    const rowsPerPage = 2;
+    let currentPage = 1;
 
     // Lấy tất cả các hàng trong bảng
     const rows = Array.from(document.querySelectorAll('#orderList tbody tr'));

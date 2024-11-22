@@ -142,30 +142,30 @@ public class Coupon implements Serializable {
                 .map(Category::getCategoryName)
                 .collect(Collectors.toList());
     }
-//    public boolean isValidForOrder(Order order) {
-//        Date currentDate = new Date();
-//        if (currentDate.before(this.getStartDate()) || currentDate.after(this.getEndDate())) {
-//            return false;
-//        }
-//        return this.getCurrentUsage() <= this.getUseLimit();
-//    }
-//    public double calculateDiscount(Order order) {
-//        if (!isValidForOrder(order)) {
-//            return 0;
-//        }
-//
-//        double discount = 0;
-//
-////        // 1. Coupon loại "all" (Áp dụng cho toàn bộ đơn hàng)
-////        switch (this.getUseCondition()) {
-////            case "all" -> {
-////                if (this.getCouponType().equals("money")) {
-////                    discount = this.getCouponValue();
-////                } else {
-////                    discount = order.getTotalAmount() * (this.getCouponValue() / 100);
-////                }
-////            }
-//            // 2. Coupon loại "min" (Áp dụng nếu đơn hàng đạt giá trị tối thiểu)
+    public boolean isValidForOrder(Order order) {
+        Date currentDate = new Date();
+        if (currentDate.before(this.getStartDate()) || currentDate.after(this.getEndDate())) {
+            return false;
+        }
+        return this.getCurrentUsage() <= this.getUseLimit();
+    }
+    public double calculateDiscount(Order order) {
+        if (!isValidForOrder(order)) {
+            return 0;
+        }
+
+        double discount = 0;
+
+//        // 1. Coupon loại "all" (Áp dụng cho toàn bộ đơn hàng)
+//        switch (this.getUseCondition()) {
+//            case "all" -> {
+//                if (this.getCouponType().equals("money")) {
+//                    discount = this.getCouponValue();
+//                } else {
+//                    discount = order.getTotalAmount() * (this.getCouponValue() / 100);
+//                }
+//            }
+            // 2. Coupon loại "min" (Áp dụng nếu đơn hàng đạt giá trị tối thiểu)
 //            case "min" -> {
 //                if (order.getTotalAmount() < this.getMinOrderValue()) {
 //                    return 0;
@@ -193,8 +193,7 @@ public class Coupon implements Serializable {
 //                }
 //            }
 //        }
-//        this.currentUsage++;
-//        return discount;
+     this.currentUsage++;
+        return discount;
     }
-
-
+}

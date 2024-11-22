@@ -3,6 +3,7 @@ package business;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Shift implements Serializable {
@@ -14,8 +15,9 @@ public class Shift implements Serializable {
     private Date shiftDate;
     private String startTime;
     private String endTime;
-    
-    // Getters and Setters
+
+    @ManyToMany(mappedBy = "listShift") // mappedBy tham chiếu tới listShift của Staff
+    private List<Staff> staffList;
 
     public Long getShiftID() {
         return shiftID;
