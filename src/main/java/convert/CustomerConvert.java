@@ -20,7 +20,6 @@ public class CustomerConvert {
             Address address = customer.getAddress();
             String fullAddress = address.getStreet() + ", " + address.getCity() + ", " + address.getProvince() + ", " + address.getCountry();
             dto.setAddress(fullAddress);
-
         }
         // Chuyển đổi mảng byte của feedbackImage thành chuỗi Base64
         if (customer.getAvatar() != null) {
@@ -29,7 +28,6 @@ public class CustomerConvert {
         }
         return dto;
     }
-
     public static CustomerByIdResponseDTO convertToDTOCustomer (Customer customer) {
         CustomerByIdResponseDTO dto = modelMapper.map(customer, CustomerByIdResponseDTO.class);
         // Chuyển đổi mảng byte của feedbackImage thành chuỗi Base64

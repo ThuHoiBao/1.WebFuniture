@@ -260,11 +260,12 @@
                 <!-- Phần thông tin khách hàng -->
                 <div class="customer-profile" style="display: flex; gap: 20px; align-items: stretch; height: auto;">
                     <!-- Ảnh đại diện -->
-                    <div href="javascript:void(0);" class="product-img" style="flex-shrink: 0; height: auto; display: flex; align-items: stretch;">
+                    <div href="javascript:void(0);" class="product-img" style="flex-shrink: 0; height: 200px; width: 180px; display: flex; align-items: stretch;">
                         <img src="data:image/jpeg;base64,${customer.avatar}"
                              alt="Avatar"
-                             style="height: 100%; object-fit: cover; display: block;" />
+                             style="height: 100%; width: 100%; object-fit: cover; display: block;" />
                     </div>
+
                     <!-- Thông tin khách hàng -->
                     <div id="customer-info">
                         <div>
@@ -450,38 +451,64 @@
 </div>
 
 
-<div class="modal fade" id="productOfOrderList" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="max-width: 90%; width: 90%; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);">
-        <div class="modal-content" style="border: none; background: #ffffff;">
-            <div class="modal-header" style="background: linear-gradient(to right, #ffffff, #f8f9fa); color: #000000; padding: 15px; border-bottom: 1px solid #dee2e6;">
-                <h5 class="modal-title" id="statusList" style="font-weight: bold;">Danh Sách Sản Phẩm</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #000000; opacity: 1;" onclick="$('#productOfOrderList').modal('hide')">
+<div class="modal fade" id="productOfOrderList" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document" style="max-width: 90%; width: 90%;">
+        <div class="modal-content" id="orderModalContent">
+            <div class="modal-header" id="orderModalHeader">
+                <h5 class="modal-title" id="modalTitle">Chi Tiết Hóa Đơn</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#productOfOrderList').modal('hide')">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="padding: 20px;">
-                <!-- Bọc bảng trong table-responsive để có cuộn ngang -->
-                <div class="table-responsive" style="margin-top: 10px;">
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr style="background: #17a2b8; color: white; font-weight: bold;">
-                            <th>STT</th>
-                            <th>Nội Thất</th>
-                            <th>Mô Tả</th>
-                            <th>Giá Một Sản Phẩm</th>
-                            <th>Trạng Thái</th>
-                            <th>Số Lượng</th>
-                            <th>Tổng Chi Phí</th>
+            <div class="modal-body" id="orderModalBody">
+                <!-- Thông tin thanh toán -->
+                <div id="paymentInfo">
+                    <h5>Thông Tin Thanh Toán</h5>
+                    <table>
+                        <tr>
+                            <td class="payment-label">Tổng chi phí:</td>
+                            <td class="payment-value" id="paymentTotalPrice">13,500,000 VNĐ</td>
                         </tr>
-                        </thead>
-                        <tbody id="productOrderTableBody" style="color: #555;">
-                        <!-- Dữ liệu sẽ được điền động từ JavaScript -->
-                        </tbody>
+                        <tr>
+                            <td class="payment-label">Mã giảm giá:</td>
+                            <td class="payment-value" id="paymentCoupon">Giảm giá 5%</td>
+                        </tr>
+                        <tr>
+                            <td class="payment-label">Phương thức thanh toán:</td>
+                            <td class="payment-value" id="paymentMethod">Cash on Delivery</td>
+                        </tr>
+                        <tr>
+                            <td class="payment-label">Tiền thanh toán:</td>
+                            <td class="payment-value" id="paymentMoney">2,000,000 VNĐ</td>
+                        </tr>
                     </table>
                 </div>
+                <!-- Danh sách sản phẩm -->
+                <div id="productList">
+                    <h5>Danh Sách Sản Phẩm</h5>
+                    <div class="table-responsive1">
+                        <table class="table table-bordered1">
+                            <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Nội Thất</th>
+                                <th>Mô Tả</th>
+                                <th>Giá Một Sản Phẩm</th>
+                                <th>Trạng Thái</th>
+                                <th>Số Lượng</th>
+                                <th>Tổng Chi Phí</th>
+                            </tr>
+                            </thead>
+                            <tbody id="productOrderTableBody">
+                            <!-- Dữ liệu sẽ được điền động từ JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer" style="background: #f8f9fa; border-top: 1px solid #dee2e6;">
-                <button type="button" class="btn btn-success" data-dismiss="modal" style="border-radius: 5px;" onclick="$('#productOfOrderList').modal('hide')">Hủy Thao Tác</button>
+            <div class="modal-footer" id="orderModalFooter">
+                <button type="button" class="btn btn-primary" onclick="downloadPDF()">Tải Hóa Đơn PDF</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#productOfOrderList').modal('hide')">Đóng</button>
             </div>
         </div>
     </div>
@@ -518,10 +545,14 @@
 <script src="${pageContext.request.contextPath}/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/plugins/sweetalert/sweetalerts.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/script.js"></script>
+<script src="${pageContext.request.contextPath}/https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="${pageContext.request.contextPath}/https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/ordercustomer/pageorderCustomer.js"></script>
 <script src="${pageContext.request.contextPath}/ordercustomer/loadAndSearchOrder.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/ordercustomer/customer.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/ordercustomer/modelDetailBill.css">
+
 
 
 <jsp:include page="${pageContext.request.contextPath}/ordercustomer/loadFeedback.jsp"></jsp:include>

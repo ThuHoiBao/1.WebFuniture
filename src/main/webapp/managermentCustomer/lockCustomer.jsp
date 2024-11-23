@@ -93,6 +93,17 @@
     function btnDeleteCustomer(data) {
         $('#confirmDeleteModal').modal('show');
 
+        // nút khác
+        $('#deleteReason').off('change').on('change', function () {
+            if ($(this).val() === 'Khác') {
+                $('#deleteReasonText').show();
+            } else {
+                $('#deleteReasonText').hide();
+                $('#deleteReasonText').val('');
+            }
+        });
+
+
         $('#confirmDeleteButton').off('click').on('click', function () {
             const reason = $('#deleteReason').val();
             const additionalReason = $('#deleteReasonText').val();

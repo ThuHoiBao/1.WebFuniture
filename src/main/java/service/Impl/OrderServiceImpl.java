@@ -25,4 +25,9 @@ public class OrderServiceImpl implements IOrderService {
        }
         return orderResponseDTOs;
     }
+
+    @Override
+    public Long totalPriceOfOrder(Long orderId) {
+        return 0l;
+    }
 }

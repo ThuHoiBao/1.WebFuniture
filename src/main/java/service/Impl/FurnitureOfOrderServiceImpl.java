@@ -2,27 +2,27 @@ package service.Impl;
 
 import DAO.IFurnitureDAO;
 import DAO.impl.FurnitureDAOImpl;
-import DTO.responseDTO.ProductOfOrderResponseDTO;
+import DTO.responseDTO.FurnitureOfOrderResponseDTO;
 import business.Furniture;
 import convert.FurnitureConvert;
-import service.IProductOfOrderService;
+import service.IFurnitureOfOrderService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProductOfOrderServiceImpl implements IProductOfOrderService {
+public class FurnitureOfOrderServiceImpl implements IFurnitureOfOrderService {
     FurnitureConvert furnitureConvert = new FurnitureConvert();
     IFurnitureDAO furnitureDAO = new FurnitureDAOImpl();
     @Override
-    public List<ProductOfOrderResponseDTO> getProductOfOrder(Long orderID) {
+    public List<FurnitureOfOrderResponseDTO> getProductOfOrder(Long orderID) {
         List<Furniture> furnitures = furnitureDAO.getFurnituresByOrderId(orderID);
-        Map<Long, ProductOfOrderResponseDTO> groupedMap = new HashMap<>();
+        Map<Long, FurnitureOfOrderResponseDTO> groupedMap = new HashMap<>();
         for (Furniture furniture : furnitures) {
             Long categoryId = furniture.getCategory().getId();
             // Lấy hoặc tạo mới ProductOfOrderResponseDTO cho Category này
-            ProductOfOrderResponseDTO dto = groupedMap.getOrDefault(categoryId, new ProductOfOrderResponseDTO());
+            FurnitureOfOrderResponseDTO dto = groupedMap.getOrDefault(categoryId, new FurnitureOfOrderResponseDTO());
             if (dto.getCategoryName() == null) {
                 dto = FurnitureConvert.convertToDTO(furniture);
             }
@@ -37,5 +37,15 @@ public class ProductOfOrderServiceImpl implements IProductOfOrderService {
             groupedMap.put(categoryId, dto);
         }
         return new ArrayList<>(groupedMap.values());
+    }
+
+    @Override
+    public Long totalPriceOfOrder(Long orderID) {
+        List<Furniture> furnitures = furnitureDAO.getFurnituresByOrderId(orderID);
+        Long totalPrice = 0L;
+        for (Furniture furniture : furnitures) {
+            totalPrice += furniture.getFurniturePrice();
+        }
+        return totalPrice;
     }
 }

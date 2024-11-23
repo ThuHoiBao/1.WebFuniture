@@ -14,7 +14,7 @@ public class FurnitureDAOImpl implements IFurnitureDAO {
     private EntityManagerFactory emf;
 
     public FurnitureDAOImpl() {
-        this.emf = Persistence.createEntityManagerFactory("employeePU"); // Tạo EntityManagerFactory
+        this.emf = Persistence.createEntityManagerFactory("employeePU");
     }
     @Override
     public List<Furniture> getFurnituresByOrderId(Long orderId) {
@@ -24,4 +24,6 @@ public class FurnitureDAOImpl implements IFurnitureDAO {
         query.setParameter("orderId", orderId);
         return query.getResultList();
     }
+
+
 }

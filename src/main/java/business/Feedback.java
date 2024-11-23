@@ -8,7 +8,7 @@ import java.util.Base64;
 import java.util.List;
 
 @Entity
-public class Review implements Serializable {
+public class Feedback implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private  Long id;
@@ -28,7 +28,7 @@ public class Review implements Serializable {
     @JoinColumn(name = "ORDERID")
     private  Order  order;
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "feedback", cascade = CascadeType.ALL, orphanRemoval = true)
     private List <ImageFeedback> imageFeedbacks = new ArrayList<>();
 
 

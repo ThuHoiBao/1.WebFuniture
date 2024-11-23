@@ -13,18 +13,31 @@
     }
     function loadListProduct(orderID) {
         $.ajax({
-            url: "/admin/customer-order/" + orderID,
-            type: "PUT",
-            dataType: "json",
+            url: '/admin/customer-order/' + orderID,
+            type: 'PUT',
+            dataType: 'json',
             success: function(response) {
-                // Làm sạch bảng trước khi thêm dữ liệu mới
+                // Làm sạch dữ liệu cũ
                 $('#productOrderTableBody').empty();
+                $('#paymentTotalPrice').text('');
+                $('#paymentCoupon').text('');
+                $('#paymentMethod').text('');
+                $('#paymentMoney').text('');
 
-                if (response.length > 0) {
+                // Hiển thị thông tin thanh toán
+                if (response.paymentResponseDTO) {
+                    const payment = response.paymentResponseDTO;
+                    $('#paymentMethod').text(payment.method || 'Không xác định');
+                    $('#paymentTotalPrice').text(payment.totalPrice ? payment.totalPrice.toLocaleString() + ' VNĐ' : '0 VNĐ');
+                    $('#paymentMoney').text(payment.money ? payment.money.toLocaleString() + ' VNĐ' : '0 VNĐ');
+                    $('#paymentCoupon').text(payment.couponName || 'Không có mã giảm giá');
+                }
+
+                // Hiển thị danh sách sản phẩm
+                if (response.furnitureOfOrderResponseDTO && response.furnitureOfOrderResponseDTO.length > 0) {
                     let productRows = '';
-                    // Duyệt qua từng sản phẩm và tạo HTML
-                    response.forEach(function (product, index) {
-                        // Xác định lớp màu dựa trên trạng thái
+                    response.furnitureOfOrderResponseDTO.forEach(function(product, index) {
+                        // Xác định trạng thái
                         let statusClass = '';
                         if (product.furnitureStatus === 'ON_SALE') {
                             statusClass = 'bg-success text-white'; // Xanh lá cây
@@ -34,37 +47,71 @@
                             statusClass = 'bg-warning text-dark'; // Vàng
                         }
 
+                        // Cộng chuỗi HTML cho từng sản phẩm
                         productRows +=
                             '<tr>' +
                             '<td>' + (index + 1) + '</td>' +
                             '<td>' + product.categoryName + '</td>' +
                             '<td>' + product.categoryDescription + '</td>' +
-                            '<td>' + product.furniturePrice + '</td>' +
+                            '<td>' + product.furniturePrice.toLocaleString() + ' VNĐ</td>' +
                             '<td><span class="badge ' + statusClass + '">' + product.furnitureStatus + '</span></td>' +
                             '<td>' + product.quantity + '</td>' +
-                            '<td>' + product.totalPrice + '</td>' +
+                            '<td>' + product.totalPrice.toLocaleString() + ' VNĐ</td>' +
                             '</tr>';
                     });
 
                     // Thêm tất cả các dòng vào bảng
                     $('#productOrderTableBody').append(productRows);
-
-                    // Hiển thị modal
-                    $('#productOfOrderList').modal('show');
                 } else {
-                    // Nếu không có dữ liệu
+                    // Không có sản phẩm
                     $('#productOrderTableBody').append(
                         '<tr>' +
                         '<td colspan="7" class="text-center">Không có sản phẩm nào</td>' +
                         '</tr>'
                     );
-                    $('#productOfOrderList').modal('show');
                 }
+
+                // Hiển thị modal
+                $('#productOfOrderList').modal('show');
             },
-            error: function (result) {
-                console.log("Error: ", result);
-                alert("Đã xảy ra lỗi khi tải danh sách sản phẩm.");
+            error: function() {
+                alert('Lỗi khi tải dữ liệu hóa đơn.');
             }
         });
     }
+
+    function downloadPDF() {
+        // Lấy nội dung modal
+        const invoiceElement = document.getElementById('productOfOrderList');
+
+        // Kiểm tra nếu modal đang hiển thị
+        if (!invoiceElement.classList.contains('show')) {
+            alert('Hãy mở modal trước khi tải PDF!');
+            return;
+        }
+
+        // Sử dụng html2canvas để chụp nội dung modal thành hình ảnh
+        html2canvas(invoiceElement, { scale: 2 }).then((canvas) => {
+            // Chuyển canvas thành hình ảnh
+            const imgData = canvas.toDataURL('image/png');
+
+            // Tạo đối tượng jsPDF
+            const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+
+            // Kích thước PDF
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+            // Thêm hình ảnh vào PDF
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+            // Lưu file PDF
+            pdf.save('hoa-don.pdf');
+        }).catch((error) => {
+            console.error('Lỗi khi tạo PDF:', error);
+            alert('Đã xảy ra lỗi khi tạo file PDF.');
+        });
+    }
+
+
 </script>

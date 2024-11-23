@@ -12,8 +12,8 @@ public class ImageFeedback implements Serializable {
     private byte[] feedbackImage;
 
     @ManyToOne
-    @JoinColumn(name = "review_id") // Cột `order_id` trong bảng FURNITURE
-    private Review review;
+    @JoinColumn(name = "feedback_id") // Cột `order_id` trong bảng FURNITURE
+    private Feedback feedback;
 
     public Long getId() {
         return id;
@@ -31,11 +31,11 @@ public class ImageFeedback implements Serializable {
         this.feedbackImage = feedbackImage;
     }
 
-    public Review getReview() {
-        return review;
+    public Feedback getFeedback() {
+        return feedback;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
     }
 }

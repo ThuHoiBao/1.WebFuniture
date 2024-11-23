@@ -1,14 +1,14 @@
 package convert;
 
-import DTO.responseDTO.ProductOfOrderResponseDTO;
+import DTO.responseDTO.FurnitureOfOrderResponseDTO;
 import business.Furniture;
 import org.modelmapper.ModelMapper;
 
 public class FurnitureConvert {
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public static ProductOfOrderResponseDTO convertToDTO(Furniture furniture ) {
-        ProductOfOrderResponseDTO productOfOrderConvert = modelMapper.map(furniture, ProductOfOrderResponseDTO.class);
+    public static FurnitureOfOrderResponseDTO convertToDTO(Furniture furniture ) {
+        FurnitureOfOrderResponseDTO productOfOrderConvert = modelMapper.map(furniture, FurnitureOfOrderResponseDTO.class);
         return productOfOrderConvert;
     }
 }

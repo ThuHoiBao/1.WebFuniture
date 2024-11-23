@@ -1,6 +1,6 @@
 package DTO.responseDTO;
 
-public class ProductOfOrderResponseDTO {
+public class FurnitureOfOrderResponseDTO {
     private String categoryName;
     private String categoryDescription;
     private Long furniturePrice;

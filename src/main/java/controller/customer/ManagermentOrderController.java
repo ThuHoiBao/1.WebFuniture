@@ -2,16 +2,9 @@ package controller.customer;
 
 import DTO.requestDTO.OrderRequestDTO;
 import DTO.responseDTO.*;
-import business.Order;
 import com.google.gson.Gson;
-import service.IFeedbackService;
-import service.IManagermentCustomerService;
-import service.IOrderService;
-import service.IProductOfOrderService;
-import service.Impl.FeedbackServiceImpl;
-import service.Impl.ManagermentCustomerServiceImpl;
-import service.Impl.OrderServiceImpl;
-import service.Impl.ProductOfOrderServiceImpl;
+import service.*;
+import service.Impl.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,8 +15,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/admin/customer-order/*"})
@@ -31,8 +22,9 @@ public class ManagermentOrderController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private IOrderService orderService=new OrderServiceImpl();
     private IFeedbackService feedbackService=new FeedbackServiceImpl();
-    private IProductOfOrderService productOfOrderService=new ProductOfOrderServiceImpl();
+    private IFurnitureOfOrderService productOfOrderService=new FurnitureOfOrderServiceImpl();
     private IManagermentCustomerService managermentCustomerService=new ManagermentCustomerServiceImpl();
+    private IPaymentService paymentService=new PaymentServiceImpl();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -99,11 +91,17 @@ public class ManagermentOrderController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
-        List<ProductOfOrderResponseDTO> responseDTO=new ArrayList<>();
+        DetailOrderAndPaymentDTO responseDTO = new DetailOrderAndPaymentDTO();
+        List<FurnitureOfOrderResponseDTO> furnitureOfOrderResponseDTOS=new ArrayList<>();
+        PaymentResponseDTO paymentResponseDTO = new PaymentResponseDTO();
+
         if (pathInfo != null && pathInfo.length() > 1) {
             try {
                 Long orderId = Long.parseLong(pathInfo.substring(1));
-                responseDTO = productOfOrderService.getProductOfOrder(orderId);
+                furnitureOfOrderResponseDTOS = productOfOrderService.getProductOfOrder(orderId);
+                paymentResponseDTO = paymentService.getPayment(orderId);
+                responseDTO.setFurnitureOfOrderResponseDTO(furnitureOfOrderResponseDTOS);
+                responseDTO.setPaymentResponseDTO(paymentResponseDTO);
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
                 resp.getWriter().write(new Gson().toJson(responseDTO));
@@ -113,7 +111,6 @@ public class ManagermentOrderController extends HttpServlet {
                 resp.getWriter().write("Invalid ID format");
             }
         } else {
-
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("Missing or invalid path info");
         }

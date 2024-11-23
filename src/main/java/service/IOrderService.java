@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface IOrderService {
     List<OrderResponseDTO> getOrder(OrderRequestDTO orderRequestDTO);
+    Long totalPriceOfOrder(Long orderId);
 }

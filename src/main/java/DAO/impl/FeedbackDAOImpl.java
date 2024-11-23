@@ -1,7 +1,7 @@
 package DAO.impl;
 
 import DAO.IFeedbackDAO;
-import business.Review;
+import business.Feedback;
 import service.IFeedbackService;
 
 import javax.persistence.EntityManager;
@@ -16,10 +16,10 @@ public class FeedbackDAOImpl implements IFeedbackDAO {
         this.emf = Persistence.createEntityManagerFactory("employeePU"); // Tạo EntityManagerFactory
     }
     @Override
-    public Review getFeedback(Long orderID) {
+    public Feedback getFeedback(Long orderID) {
         EntityManager em = emf.createEntityManager();
-        StringBuilder query = new StringBuilder("SELECT r FROM Review r WHERE r.order.id = :orderID");
-        TypedQuery<Review> queryReview = em.createQuery(query.toString(), Review.class);
+        StringBuilder query = new StringBuilder("SELECT r FROM Feedback r WHERE r.order.id = :orderID");
+        TypedQuery<Feedback> queryReview = em.createQuery(query.toString(), Feedback.class);
         queryReview.setParameter("orderID", orderID);
         return queryReview.getSingleResult();
     }
