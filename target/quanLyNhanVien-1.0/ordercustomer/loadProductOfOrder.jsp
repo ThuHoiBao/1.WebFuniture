@@ -79,39 +79,4 @@
             }
         });
     }
-
-    function downloadPDF() {
-        // Lấy nội dung modal
-        const invoiceElement = document.getElementById('productOfOrderList');
-
-        // Kiểm tra nếu modal đang hiển thị
-        if (!invoiceElement.classList.contains('show')) {
-            alert('Hãy mở modal trước khi tải PDF!');
-            return;
-        }
-
-        // Sử dụng html2canvas để chụp nội dung modal thành hình ảnh
-        html2canvas(invoiceElement, { scale: 2 }).then((canvas) => {
-            // Chuyển canvas thành hình ảnh
-            const imgData = canvas.toDataURL('image/png');
-
-            // Tạo đối tượng jsPDF
-            const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-
-            // Kích thước PDF
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-            // Thêm hình ảnh vào PDF
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-            // Lưu file PDF
-            pdf.save('hoa-don.pdf');
-        }).catch((error) => {
-            console.error('Lỗi khi tạo PDF:', error);
-            alert('Đã xảy ra lỗi khi tạo file PDF.');
-        });
-    }
-
-
 </script>

@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/plugins/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 
-    <title>Quản lý nhân viên</title>
+    <title>Quản lý khách hàng</title>
 </head>
 <body>
 <div id="global-loader">
@@ -507,7 +507,6 @@
                 </div>
             </div>
             <div class="modal-footer" id="orderModalFooter">
-                <button type="button" class="btn btn-primary" onclick="downloadPDF()">Tải Hóa Đơn PDF</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#productOfOrderList').modal('hide')">Đóng</button>
             </div>
         </div>
